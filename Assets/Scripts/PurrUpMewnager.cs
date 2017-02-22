@@ -15,12 +15,14 @@ public class PurrUpMewnager : MonoBehaviour {
 	//Arrays store the governing values for spawning, 0 is Catnip, 1 is Milk, 2 is Tuna and 3 is Cheese
 	int[] respawnTimers  = new int[4];
 	int[] respawn = new int[4];
-	//int[] durations  = new int[4];
 	int[] limits  = new int[4];
 	public int[] spawned  = new int[4];
 	int randomLocationID;
+	int tracker;
 	string type;
 	Vector3 spawnOffset;
+	bool canSpawn;
+	bool respawnAvail;
 
 
 	//Power Up Behaviour
@@ -45,6 +47,9 @@ public class PurrUpMewnager : MonoBehaviour {
 			spawned [i] = 0;
 		}
 		spawnOffset = new Vector3 (0.0f, 0.5f, 0.0f);
+		canSpawn = false;
+		respawnAvail = false;
+		tracker = 0;
 	}
 
 	//Spawns the appropriate power up
@@ -73,74 +78,79 @@ public class PurrUpMewnager : MonoBehaviour {
 		spawned [powerUpID]--;
 	}
 
-
 	// Update is called once per frame
-	void Update () 
+	bool SpawnCheck (int powerUpNum)
 	{
-		//Check whether the number of spawned power ups is at the limit
-		//If spawned<limit count down respawn timer
-		//when timer hits cap spawn appropriate powerup and reset timer
+		if (spawned [powerUpNum] != limits [powerUpNum]) 
+		{
+			Debug.Log ("Hit from here");
+			return true;
+		} 
+		else 
+		{
+			return false;
+		}
+	}
 
-		//Catnip Spawner
-		if (spawned[0] != limits[0]) 
+	bool RespawnCheck (int powerUpNum)
+	{
+		if (respawn [powerUpNum] != respawnTimers [powerUpNum]) 
 		{
-			respawn[0] ++;
-			if(respawn[0] == respawnTimers[0])
-			{
-				//need to add in detect if powerup has already spawned at spawner
-				//randomises spawn location
-				randomLocationID = (int)Random.Range (0.0f, spawnLocations.Length);
-				//defines power up being spawned
-				type = "Catnip";
-				//calls the spawn method
-				Spawn (randomLocationID, type);
-				//increments spawned count, deduction will be done in actual power up
-				spawned[0] ++;
-				//resets respawn timer
-				respawn[0] = 0;
-			}
-		}
-		//Milk Spawner
-		if (spawned[1] != limits[1]) 
+			return true;
+		} 
+		else 
 		{
-			respawn[1] ++;
-			if(respawn[1] == respawnTimers[1])
-			{
-				//need to add in detect if powerup has already spawned at spawner
-				randomLocationID = (int)Random.Range (0.0f, spawnLocations.Length);
-				type = "Milk";
-				Spawn (randomLocationID, type);
-				spawned[1] ++;
-				respawn[1] = 0;
-			}
+			return false;
 		}
-		//Tuna Spawner
-		if (spawned[2] != limits[2]) 
+	}
+
+
+	void SetUp (int powerUpNum)
+	{
+		randomLocationID = (int)Random.Range (0.0f, spawnLocations.Length);
+		//defines power up being spawned
+		if (powerUpNum == 0) 
 		{
-			respawn[2] ++;
-			if(respawn[2] == respawnTimers[2])
-			{
-				//need to add in detect if powerup has already spawned at spawner
-				randomLocationID = (int)Random.Range (0.0f, spawnLocations.Length);
-				type = "Tuna";
-				Spawn (randomLocationID, type);
-				spawned[2] ++;
-				respawn[2] = 0;
-			}
+			type = "Catnip";
 		}
-		//Cheese Spawner
-		if (spawned[3] != limits[3]) 
+		else if (powerUpNum == 1) 
 		{
-			respawn[3] ++;
-			if(respawn[3] == respawnTimers[3])
-			{
-				//Doesn't need a random location
-				randomLocationID = 0;
-				type = "Cheese";
-				Spawn (randomLocationID, type);
-				spawned[3] ++;
-				respawn[3] = 0;
-			}
+			type = "Milk";
 		}
+		else if (powerUpNum == 2) 
+		{
+			type = "Tuna";
+		}
+		else if (powerUpNum == 3) 
+		{
+			type = "Cheese";
+		}
+		//calls the spawn method
+		Spawn (randomLocationID, type);
+		//increments spawned count, deduction will be done in actual power up
+		spawned[powerUpNum] ++;
+		//resets respawn timer
+		respawn[powerUpNum] = 0;
+	}
+
+	void Update()
+	{
+		for(int j = 0; j <= spawned.Length-1; j++)
+		{
+			Debug.Log ("started this shit");
+
+			canSpawn = SpawnCheck (tracker);
+			if(canSpawn == true)
+			{
+				respawn[tracker] ++;
+				respawnAvail = RespawnCheck (tracker);
+				if (respawnAvail == true) 
+				{
+					SetUp (tracker);
+				}
+			}
+			tracker++;
+		}
+		tracker = 0;
 	}
 }
