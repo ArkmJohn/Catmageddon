@@ -35,7 +35,7 @@ public class MilkPowerUp : MonoBehaviour {
 		{
 			//player.gameObject.GetComponent<Tank> ().IncreaseSpeed(speedIncrease);
 			active = true;
-			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpManager> ().PowerUpPickedUp (powerUpID);
+			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
 			Destroy (this.gameObject);
 		}
 	}

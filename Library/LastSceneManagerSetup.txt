@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Rick's Corner/Test(Non-Final/TestScene.unity
+- path: Assets/Scenes/LoginScene.unity
   isLoaded: 1
   isActive: 1

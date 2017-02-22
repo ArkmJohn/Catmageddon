@@ -35,7 +35,7 @@ public class CheesePowerUp : MonoBehaviour {
 			//Spawn Mice for Players Team via AISpawner
 			//teamType = "";
 			active = true;
-			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpManager> ().PowerUpPickedUp (powerUpID);
+			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
 			Destroy (this.gameObject);
 		}
 	}

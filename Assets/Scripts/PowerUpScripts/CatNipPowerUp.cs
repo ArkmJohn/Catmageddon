@@ -37,7 +37,7 @@ public class CatNipPowerUp : MonoBehaviour {
 			invulnerability = true;
 			//player.gameObject.GetComponent<Player> ().MakeInvulnerable(invulnerability);
 			active = true;
-			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpManager> ().PowerUpPickedUp (powerUpID);
+			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
 			Destroy (this.gameObject);
 		}
 	}

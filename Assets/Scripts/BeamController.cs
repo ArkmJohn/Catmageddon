@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BeamController : MonoBehaviour {
+public class BeamController : ProjectileController {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    //public float damage = 0;
+
+    void OnTriggerStay(Collider col)
+    {
+        //if (col.gameObject.GetComponent<Character>() != null)
+            //col.gameObject.GetComponent<Character>().GetDamaged(damage);
+
+    }
 }

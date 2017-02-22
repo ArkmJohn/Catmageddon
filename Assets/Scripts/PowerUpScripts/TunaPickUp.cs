@@ -35,7 +35,7 @@ public class TunaPickUp : MonoBehaviour {
 		{
 			//player.gameObject.GetComponent<Player> ().HealDamage(heal);
 			active = true;
-			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpManager> ().PowerUpPickedUp (powerUpID);
+			GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
 			Destroy (this.gameObject);
 		}
 	}
