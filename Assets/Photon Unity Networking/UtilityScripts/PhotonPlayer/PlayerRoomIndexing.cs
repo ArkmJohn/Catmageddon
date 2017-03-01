@@ -64,8 +64,6 @@ namespace ExitGames.UtilityScripts
 
 		#endregion
 
-
-
 		#region Private Properties
 
 		int[] _playerIds;

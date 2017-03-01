@@ -27,6 +27,7 @@ public class Movement : MonoBehaviour {
 			             bulletPrefab,
 			             bulletSpawn.position,
 			             bulletSpawn.rotation);
+        bullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.transform.forward * 2000);
 		//Destroy (bullet, 3.0f);
 	}
 }
