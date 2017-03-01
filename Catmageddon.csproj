@@ -239,7 +239,11 @@
     <Compile Include="Assets\PhotonChatApi\ChatUserStatus.cs" />
     <Compile Include="Assets\PhotonChatApi\IChatClientListener.cs" />
     <Compile Include="Assets\Rick&apos;s Corner\Scripts\Movement.cs" />
+    <Compile Include="Assets\Scripts\AI\Individual\Agent.cs" />
+    <Compile Include="Assets\Scripts\AI\Individual\AgentBehaviour.cs" />
+    <Compile Include="Assets\Scripts\AI\Individual\CollisionAvoidance.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Mouse.cs" />
+    <Compile Include="Assets\Scripts\AI\Individual\Seek.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Steering.cs" />
     <Compile Include="Assets\Scripts\BeamController.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />

@@ -27,6 +27,6 @@ public class Movement : MonoBehaviour {
 			             bulletPrefab,
 			             bulletSpawn.position,
 			             bulletSpawn.rotation);
-		//Destroy (bullet, 3.0f);
+		Destroy (bullet, 3.0f);
 	}
 }
