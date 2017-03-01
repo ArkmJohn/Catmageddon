@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Steerings : MonoBehaviour
+public class Steering : MonoBehaviour
 {
 
     public GameObject AI;  
