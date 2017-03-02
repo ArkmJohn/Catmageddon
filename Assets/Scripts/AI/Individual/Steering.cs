@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Steering : MonoBehaviour
+public class Steerings : MonoBehaviour
 {
 
-    public GameObject AI;  
+    public GameObject AI;
     public GameObject Player;
     public Vector3 seek;
     public Rigidbody RB, playerRB;
@@ -49,7 +49,7 @@ public class Steering : MonoBehaviour
 
         //Desire();
         Distance();
-        ObstacleAvoidance();
+
 
         //    /*
         if (MOV == true)
@@ -63,6 +63,8 @@ public class Steering : MonoBehaviour
             predictedVel();
             Debug.Log("Seek");
         }
+        ObstacleAvoidance();
+        transform.LookAt(transform.position + RB.velocity);
         //    */
         //Debug.Log(MOV?"seek":"arrive");
     }
@@ -94,7 +96,7 @@ public class Steering : MonoBehaviour
         //seek = Vector3.ClampMagnitude(seek, Maxforce);
         RB.AddForce(seek);
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed);
-        transform.LookAt(Player.transform.position);
+        //transform.LookAt(Player.transform.position);
     }
 
 
@@ -122,7 +124,7 @@ public class Steering : MonoBehaviour
         coof = distance / 15f - 0.05f;
         coof = Mathf.Clamp(coof, 0, 1f);
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed * coof);
-        transform.LookAt(Player.transform.position);
+        // transform.LookAt(Player.transform.position);
 
 
 
@@ -151,19 +153,20 @@ public class Steering : MonoBehaviour
 
     void ObstacleAvoidance()
     {
-        Vector3 angledVec, neGangledVec;
+        Vector3 angledVec, neGangledVec, leftVec;
         Vector3 impactPoint, impactPoint2;
         Vector3 objectPos;
 
         angledVec = Quaternion.AngleAxis((10 * Multiplier), Vector3.up) * transform.forward;
         neGangledVec = Quaternion.AngleAxis((-10 * negMultiplier), Vector3.up) * transform.forward;
+        leftVec = Quaternion.AngleAxis(-90f, Vector3.up) * transform.forward;
         Ray myRay = new Ray(transform.position, transform.forward);
-        RaycastHit hit, hit2, hit3;
+        RaycastHit hit, hit2, hit3, hit4, hit5;
         //RaycastHit hit2;
         raycoof = distance / 20f;
         raycoof = Mathf.Clamp01(raycoof);
 
-        if (!(Physics.Raycast(myRay, out hit, 20f)))
+        if (!(Physics.Raycast(myRay, out hit, 20f * raycoof)))
         {
             Multiplier = 1f;
             negMultiplier = 1f;
@@ -175,7 +178,7 @@ public class Steering : MonoBehaviour
             if (hit.collider.tag == "Environment")
             {
                 Debug.Log(hit.collider.name + " is ahead");
-                if (Physics.Raycast(transform.position, angledVec, out hit2, 30f))
+                if (Physics.Raycast(transform.position, angledVec, out hit2, 25f * raycoof))
                 {
                     Debug.Log(hit2.collider.name + " is at " + Multiplier * 10f);
                     Multiplier++;
@@ -184,7 +187,7 @@ public class Steering : MonoBehaviour
                     avoidanceDirection = impactPoint - objectPos;
                     avoidanceDirection = avoidanceDirection.normalized * avoidanceForce;
                 }
-                if (Physics.Raycast(transform.position, neGangledVec, out hit3, 30f))
+                if (Physics.Raycast(transform.position, neGangledVec, out hit3, 25f * raycoof))
                 {
                     Debug.Log(hit3.collider.name + " is at " + negMultiplier * -10f);
                     negMultiplier++;
@@ -198,18 +201,37 @@ public class Steering : MonoBehaviour
                 if (Multiplier < negMultiplier)
                 {
                     RB.AddForce(avoidanceDirection);
+                    RB.AddForce(transform.right * 10f);
                     Multiplier = 1f;
                     negMultiplier = 1f;
                 }
                 else
                 {
                     RB.AddForce(avoidanceDirection2);
+                    RB.AddForce(transform.right * -10f);
                     Multiplier = 1f;
                     negMultiplier = 1f;
                 }
 
                 Debug.Log("Hallo");
 
+            }
+
+            if (Physics.Raycast(transform.position, transform.right, out hit4, 2 * raycoof))
+            {
+                if (hit4.collider.tag == "Environment")
+                {
+                    RB.AddForce(leftVec.normalized * 20f);
+                    Debug.Log("move left");
+                }
+            }
+            if (Physics.Raycast(transform.position, leftVec, out hit5, 2 * raycoof))
+            {
+                if (hit5.collider.tag == "Environment")
+                {
+                    RB.AddForce(transform.right * 20f);
+                    Debug.Log("move right");
+                }
             }
             //Debug.Log("Hello");
         }
@@ -222,6 +244,10 @@ public class Steering : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        //Gizmos.DrawLine(transform.position, transform.forward.normalized * 20f);
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward.normalized * 20f * raycoof);
+        Gizmos.DrawLine(transform.position, transform.position + transform.right * 2 * raycoof);
+        Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis(-90f, Vector3.up) * transform.forward) * 2 * raycoof));
+        Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis((10 * Multiplier), Vector3.up) * transform.forward) * 25f * raycoof));
+        Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis((-10 * negMultiplier), Vector3.up) * transform.forward) * 25f * raycoof));
     }
 }
