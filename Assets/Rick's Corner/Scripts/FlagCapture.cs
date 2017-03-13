@@ -5,40 +5,43 @@ using UnityEngine.UI;
 
 public class FlagCapture : MonoBehaviour {
 
-	private CaptureController captureController = GetComponent<CaptureController>();
+	private CaptureController captureController;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 
-		CaptureController = GameObject.Find("Player").GetComponent<CaptureController>;
+		captureController = GameObject.Find("Player").GetComponent<CaptureController> ();
 	}
 
-	void OnTriggerEnter () {
+	void OnTriggerEnter (Collider other) 
+	{
 		
-		if (Collision.gameObject.tag == "BlueTeam")  {
-			CaptureController.BlueTeam = true;
+		if (other.gameObject.tag == "BlueTeam")  
+		{
+			captureController.BlueTeam = true;
 
 		}
 
-		if (Collision.gameObject.tag == "RedTeam") {
-				CaptureController.RedTeam = true;
-
-			}
+		if (other.gameObject.tag == "RedTeam") 
+		{
+			captureController.RedTeam = true;
+		}
 
 	}
 
-				void OnTriggerExit () {
+	void OnTriggerExit (Collider other) 
+	{
+		if (other.gameObject.tag == "BlueTeam") 
+		{
+			captureController.BlueTeam = false;
+		}
 
-		if (Collision.gameObject.CompareTag == "BlueTeam") {
-						CaptureController.BlueTeam = false;
+		if (other.gameObject.tag == "RedTeam") 
+		{
+			captureController.RedTeam = false;
+		}
 
-					}
-
-		if (Collision.gameObject.CompareTag == "RedTeam") {
-							CaptureController.RedTeam = false;
-
-						}
-
-							}
+	}
 	
 }
