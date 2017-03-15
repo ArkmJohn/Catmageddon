@@ -9,22 +9,18 @@ public class CaptureController : MonoBehaviour {
 	public float blueCapturePercentage = 0;
 	public bool BlueTeam = false;
 	public bool RedTeam = false;
-	public GameObject FlagRed;
-	public GameObject FlagBlue;
-	public GameObject FlagNeutral;
-	public GameObject mistRed;
-	public GameObject mistBlue;
-	public GameObject mistNeutral;
+	//private GameObject Flag;
+	//public GameObject Mist;
+	private MeshRenderer flagMat;
+
 	// Use this for initialization
 	void Start () 
 	{
-		FlagRed.GetComponent<MeshRenderer> ().enabled = false;
-		FlagBlue.GetComponent<MeshRenderer> ().enabled = false;
-		FlagNeutral.GetComponent<MeshRenderer> ().enabled = true;
-
-		mistRed.GetComponent <Renderer> ().enabled = false;
-		mistBlue.GetComponent <Renderer> ().enabled = false;
-		mistNeutral.GetComponent <Renderer> ().enabled = true;
+		//Flag.GetComponent <Renderer> ().material.color = new Color (
+		//Mist.GetComponent <Renderer> ().enabled = true;
+		flagMat = GameObject.Find ("Flag").GetComponent<MeshRenderer> ();
+		//flagMat.color = Color.white;
+		flagMat.material.color = Color.white;
 	}
 	
 	// Update is called once per frame
@@ -54,38 +50,38 @@ public class CaptureController : MonoBehaviour {
 		{
 
 			redCapturePercentage = 100;
-			FlagRed.GetComponent<MeshRenderer> ().enabled = true;
-			FlagBlue.GetComponent<MeshRenderer> ().enabled = false;
-			FlagNeutral.GetComponent<MeshRenderer> ().enabled = false;
+			flagMat.material.color = Color.red;
+			//Flag.GetComponent <Renderer> ().enabled = true;
 
-			mistRed.GetComponent<Renderer> ().enabled = true;
-			mistBlue.GetComponent<Renderer> ().enabled = false;
-			mistNeutral.GetComponent<Renderer> ().enabled = false;
+			//mistRed.GetComponent<Renderer> ().enabled = true;
+			//mistBlue.GetComponent<Renderer> ().enabled = false;
+			//mistNeutral.GetComponent<Renderer> ().enabled = false;
 		}
 
 		if (blueCapturePercentage >= 100) 
 		{
 
 			blueCapturePercentage = 100;
-			FlagRed.GetComponent<MeshRenderer> ().enabled = false;
-			FlagBlue.GetComponent <MeshRenderer> ().enabled = true;
-			FlagNeutral.GetComponent<MeshRenderer> ().enabled = false;
+			flagMat.material.color = Color.blue;
+			//FlagRed.GetComponent<MeshRenderer> ().enabled = false;
+			//FlagBlue.GetComponent <MeshRenderer> ().enabled = true;
+			//FlagNeutral.GetComponent<MeshRenderer> ().enabled = false;
 
-			mistRed.GetComponent <Renderer> ().enabled = false;
-			mistBlue.GetComponent <Renderer> ().enabled = true;
-			mistNeutral.GetComponent<Renderer> ().enabled = false;
+			//mistRed.GetComponent <Renderer> ().enabled = false;
+			//mistBlue.GetComponent <Renderer> ().enabled = true;
+			//mistNeutral.GetComponent<Renderer> ().enabled = false;
 		}
 
 		if (blueCapturePercentage <= 50 && redCapturePercentage <= 51) 
 		{
 
-			FlagRed.GetComponent<MeshRenderer> ().enabled = false;
-			FlagBlue.GetComponent<MeshRenderer> ().enabled = false;
-			FlagNeutral.GetComponent<MeshRenderer> ().enabled = true;
-
-			mistRed.GetComponent<Renderer> ().enabled = false;
-			mistBlue.GetComponent<Renderer> ().enabled = false;
-			mistNeutral.GetComponent<Renderer> ().enabled = true;
+			//FlagRed.GetComponent<MeshRenderer> ().enabled = false;
+			//FlagBlue.GetComponent<MeshRenderer> ().enabled = false;
+			//FlagNeutral.GetComponent<MeshRenderer> ().enabled = true;
+			flagMat.material.color = Color.white;
+			//mistRed.GetComponent<Renderer> ().enabled = false;
+			//mistBlue.GetComponent<Renderer> ().enabled = false;
+			//mistNeutral.GetComponent<Renderer> ().enabled = true;
 		}
 
 		if (redCapturePercentage <= 0) 
@@ -98,9 +94,5 @@ public class CaptureController : MonoBehaviour {
 			blueCapturePercentage = 0;
 		}
 	}
-
-//	void OnGUI () 
-//	{
-//		GUI.Box(Rect(10,10,300,25), "Red Cap" + " " + redCapturePercentage.ToString("0") + " " + "BlueCap" + " " + blueCapturePercentage.ToString("0"));
-//	}
+				
 }
