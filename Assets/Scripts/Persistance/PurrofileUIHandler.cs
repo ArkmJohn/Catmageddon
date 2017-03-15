@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class PurrofileUIHandler : MonoBehaviour {
 
-    public PurrofileHandler pHandler;
+    public GameObject LoginPanel, SignUpPanel, LoadParticle;
+
     public InputField loginUsername;
     public InputField loginPassword;
 
@@ -13,10 +14,6 @@ public class PurrofileUIHandler : MonoBehaviour {
     public InputField signupUsername;
     public InputField signupPassword;
 
-    void Awake()
-    {
-        pHandler = FindObjectOfType<PurrofileHandler>();
-    }
     public void Login()
     {
         Debug.Log(loginUsername.text.ToString() + " Logging In");
@@ -24,7 +21,7 @@ public class PurrofileUIHandler : MonoBehaviour {
         string loginPass = loginPassword.text.ToString();
 
         if (loginUser != "" || loginPass != "")
-            StartCoroutine(pHandler.LogInToDB(loginUser, loginPass));
+            PurrofileHandler.Instance.LogMeIn(loginUser, loginPass);
         else
             Debug.Log("Input Fields are missing Input!");
     }
@@ -36,6 +33,18 @@ public class PurrofileUIHandler : MonoBehaviour {
         string signupPass = signupPassword.text.ToString();
         string signupE = signupEmail.text.ToString();
 
-        StartCoroutine(pHandler.CreateUser(signupUser, signupPass, signupE));
+        PurrofileHandler.Instance.SignMeUp(signupE, signupUser, signupPass);
+    }
+
+    public void ReloadSignUp()
+    {
+        SignUpPanel.SetActive(true);
+        LoadParticle.SetActive(false);
+    }
+
+    public void ReloadLogIn()
+    {
+        LoginPanel.SetActive(true);
+        LoadParticle.SetActive(false);
     }
 }

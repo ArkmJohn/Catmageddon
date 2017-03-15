@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Catmageddon/Tank")]
-public class TankObject : ScriptableObject
+public class TankObject : Item
 {
     [Tooltip("Tank Model to be used. Must have a 'SpawnPoint' and 'CatSpawnPoint' already")]
     public GameObject TankPrefab;

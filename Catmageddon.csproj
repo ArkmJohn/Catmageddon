@@ -73,8 +73,11 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Library\ScriptAssemblies\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="Photon3Unity3D">
       <HintPath>Assets\Plugins\Photon3Unity3D.dll</HintPath>
@@ -239,7 +242,10 @@
     <Compile Include="Assets\PhotonChatApi\ChatUserStatus.cs" />
     <Compile Include="Assets\PhotonChatApi\IChatClientListener.cs" />
     <Compile Include="Assets\Rick&apos;s Corner\Scripts\Airstrike.cs" />
+    <Compile Include="Assets\Rick&apos;s Corner\Scripts\CaptureController.cs" />
+    <Compile Include="Assets\Rick&apos;s Corner\Scripts\FlagCapture.cs" />
     <Compile Include="Assets\Rick&apos;s Corner\Scripts\Movement.cs" />
+    <Compile Include="Assets\Scripts\AI\Individual\Mouse.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Steering.cs" />
     <Compile Include="Assets\Scripts\GameManagers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Persistance\CurrentPurrofile.cs" />
@@ -259,14 +265,22 @@
     <Compile Include="Assets\Scripts\PurrUpMewnager.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\AutomaticWeapon.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\Beam.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\Cat.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\Hat.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\Item.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\SemiAutomaticWeapon.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\TankObject.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\Weapon.cs" />
     <Compile Include="Assets\Scripts\Utilities\CTT\CTTStart.cs" />
+    <Compile Include="Assets\Scripts\Utilities\CheckEmail.cs" />
     <Compile Include="Assets\Scripts\Utilities\Enum.cs" />
+    <Compile Include="Assets\Scripts\Utilities\ErrorText.cs" />
+    <Compile Include="Assets\Scripts\Utilities\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\ParticleController.cs" />
     <Compile Include="Assets\Scripts\Utilities\ProjectileController.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ClassSelect.cs" />
+    <Compile Include="Assets\Scripts\Utilities\UI\ItemContainer.cs" />
+    <Compile Include="Assets\Scripts\Utilities\UI\ItemHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />

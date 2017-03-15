@@ -9,5 +9,6 @@ public abstract class PowerUpEffectApplication : MonoBehaviour {
 
 	public int powerUpID;
 
+    [PunRPC]
 	public abstract void ApplyPowerUpEffect () ;
 }
