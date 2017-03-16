@@ -14,7 +14,7 @@ public class TunaPickUp : PowerUpEffectApplication {
 	//Disables the player's ability to take damage
 
 
-	public override void ApplyPowerUpEffect () 
+	public override void ApplyPowerUpEffect (int playerID) 
 	{
 		//Heal Function
 		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
