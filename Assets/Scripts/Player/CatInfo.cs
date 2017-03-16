@@ -162,6 +162,26 @@ public class CatInfo : Photon.PunBehaviour, IPunObservable {
         {
             return;
         }
+		if (other.gameObject.tag == "PowerUp") 
+		{
+			other.gameObject.GetComponent<PowerUpEffectApplication> ().ApplyPowerUpEffect (PhotonNetwork.player.ID);
+		}
+		//Pickup interaction for the trash cans
+		if (other.gameObject.tag == "TrashCan") 
+		{
+			if (other.gameObject.GetComponent<TrashCanValues> ().GetPickUpState () == false)
+			{
+//				string teamIdentifier = other.gameObject.GetComponent<TrashCanValues> ().teamID;
+//				if (teamIdentifier == "blueTeam" && Player is red) 
+//				{
+//					GameObject.FindGameObjectWithTag ("TrashCanManager").GetComponent<CaptureTheTrashManager> ().PickUpTrashCan (this.transform, teamIdentifier);
+//				}
+//				else if (teamIdentifier == "redTeam" && Player is blue) 
+//				{
+//					GameObject.FindGameObjectWithTag ("TrashCanManager").GetComponent<CaptureTheTrashManager> ().PickUpTrashCan (this.transform, teamIdentifier);
+//				}
+			}
+		}
 
         Debug.Log("Warning: should Apply Damage");
         //GetDamaged(other.GetComponent<ProjectileController>().damage);

@@ -15,7 +15,7 @@ public class CatNipPowerUp : PowerUpEffectApplication {
 
 	// Use this for initialization
 
-	public override void ApplyPowerUpEffect () 
+	public override void ApplyPowerUpEffect (int playerID) 
 	{
 		//Invulnerable
 		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);

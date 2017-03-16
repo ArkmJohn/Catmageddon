@@ -13,7 +13,7 @@ public class MilkPowerUp : PowerUpEffectApplication {
 	//Checks the player who picked it up
 	//Temporaily increases player's speed stat for it's duration
 
-	public override void ApplyPowerUpEffect () 
+	public override void ApplyPowerUpEffect (int playerID) 
 	{
 		//Speed Function
 		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);

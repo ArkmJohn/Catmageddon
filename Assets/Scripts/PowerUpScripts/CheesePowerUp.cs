@@ -13,7 +13,7 @@ public class CheesePowerUp : PowerUpEffectApplication {
 
 	// Use this for initialization
 
-	public override void ApplyPowerUpEffect () 
+	public override void ApplyPowerUpEffect (int playerID) 
 	{
 
 		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
