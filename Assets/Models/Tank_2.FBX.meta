@@ -1,0 +1,122 @@
+fileFormatVersion: 2
+guid: ed3bfa9c1b28f804c9332b6f9665c379
+timeCreated: 1489574709
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Cylinder007
+    100002: Left_TankThread_Tanky002
+    100004: Left_TankWheel_Tanky_007
+    100006: LeftFold_Tanky002
+    100008: Nozzle_Tanky002
+    100010: SMG_Tanky002
+    100012: //RootNode
+    100014: TankBody_Tanky002
+    100016: TankHead_Tanky002
+    100018: WaterTank_Tanky002
+    400000: Cylinder007
+    400002: Left_TankThread_Tanky002
+    400004: Left_TankWheel_Tanky_007
+    400006: LeftFold_Tanky002
+    400008: Nozzle_Tanky002
+    400010: SMG_Tanky002
+    400012: //RootNode
+    400014: TankBody_Tanky002
+    400016: TankHead_Tanky002
+    400018: WaterTank_Tanky002
+    2300000: Cylinder007
+    2300002: Left_TankThread_Tanky002
+    2300004: Left_TankWheel_Tanky_007
+    2300006: LeftFold_Tanky002
+    2300008: Nozzle_Tanky002
+    2300010: SMG_Tanky002
+    2300012: TankBody_Tanky002
+    2300014: TankHead_Tanky002
+    2300016: WaterTank_Tanky002
+    3300000: Cylinder007
+    3300002: Left_TankThread_Tanky002
+    3300004: Left_TankWheel_Tanky_007
+    3300006: LeftFold_Tanky002
+    3300008: Nozzle_Tanky002
+    3300010: SMG_Tanky002
+    3300012: TankBody_Tanky002
+    3300014: TankHead_Tanky002
+    3300016: WaterTank_Tanky002
+    4300000: SMG_Tanky002
+    4300002: Nozzle_Tanky002
+    4300004: Left_TankWheel_Tanky_007
+    4300006: TankHead_Tanky002
+    4300008: Left_TankThread_Tanky002
+    4300010: Cylinder007
+    4300012: WaterTank_Tanky002
+    4300014: TankBody_Tanky002
+    4300016: LeftFold_Tanky002
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

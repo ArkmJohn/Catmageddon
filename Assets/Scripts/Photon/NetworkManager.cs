@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 public class NetworkManager : Photon.PunBehaviour
 {
-
+    public static NetworkManager instance = new NetworkManager();
     public Text netDebug;
     public string appVersion = "1.0";
-    public string pName = "John";
     public string GameScene = "TankScenes";
     public PhotonLogLevel Loglevel = PhotonLogLevel.Informational;
     [Tooltip("The maximum number of players per room. When a room is full, it can't be joined by new players, and so new room will be created")]
@@ -17,22 +16,48 @@ public class NetworkManager : Photon.PunBehaviour
     [Tooltip("The current status if the player is connecting or not")]
     public bool isConnecting;
 
+    #region Instance and things
+
+    static NetworkManager()
+    {
+    }
+
+    private NetworkManager()
+    {
+    }
+
+    public static NetworkManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+    #endregion
+
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+
+        instance = this;
+
         // Forces Log Level to be the same as the log level set
         PhotonNetwork.logLevel = Loglevel;
-        SetPlayerName(pName);
+        Connect();
     }
 
     // Connects to the lobby if not connected yet and joins a random room
-    // TODO: matchmaking
     public void Connect()
     {
         isConnecting = true;
 
         if (PhotonNetwork.connected)
         {
-             PhotonNetwork.JoinRandomRoom();
+            //PhotonNetwork.JoinRandomRoom();
+            
         }
         else
         {
@@ -46,8 +71,8 @@ public class NetworkManager : Photon.PunBehaviour
     {
         if (isConnecting)
         {
-
-            PhotonNetwork.JoinRandomRoom();
+            netDebug.text = "Connected to Servers";
+            //PhotonNetwork.JoinRandomRoom();
         }
     }
 
