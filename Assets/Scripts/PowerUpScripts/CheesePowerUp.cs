@@ -15,7 +15,7 @@ public class CheesePowerUp : PowerUpEffectApplication {
 
 	public override void ApplyPowerUpEffect (int playerID) 
 	{
-		//SpawnMice
+
 		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
 		Destroy (this.gameObject);
 	}
