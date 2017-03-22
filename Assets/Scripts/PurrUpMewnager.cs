@@ -11,8 +11,9 @@ public class PurrUpMewnager : MonoBehaviour {
 	public GameObject Milk;
 	public GameObject Tuna;
 	public GameObject Cheese;
+	public GameObject KittyStrike;
 
-	//Arrays store the governing values for spawning, 0 is Catnip, 1 is Milk, 2 is Tuna and 3 is Cheese
+	//Arrays store the governing values for spawning, 0 is Catnip, 1 is Milk, 2 is Tuna and 3 is Cheese/Kitty Strike
 	int[] respawnTimers  = new int[4];
 	int[] respawn = new int[4];
 	int[] limits  = new int[4];
@@ -23,7 +24,7 @@ public class PurrUpMewnager : MonoBehaviour {
 	Vector3 spawnOffset;
 	bool canSpawn;
 	bool respawnAvail;
-
+	bool switchPowerUp;
 
 	//Power Up Behaviour
 	//One spawns around the map in a random location
@@ -49,6 +50,7 @@ public class PurrUpMewnager : MonoBehaviour {
 		spawnOffset = new Vector3 (0.0f, 0.5f, 0.0f);
 		canSpawn = false;
 		respawnAvail = false;
+		switchPowerUp = false;
 		tracker = 0;
 	}
 
@@ -67,9 +69,18 @@ public class PurrUpMewnager : MonoBehaviour {
 		{
 			Instantiate (Tuna, spawnLocations [ID].transform.position + spawnOffset, Quaternion.identity);
 		}
-		else if (type == "Cheese") 
+		else if (type == "Centre") 
 		{
-			Instantiate (Cheese, centreSpawnLocation.transform.position + spawnOffset, Quaternion.identity);
+			if (switchPowerUp == false) 
+			{
+				Instantiate (Cheese, centreSpawnLocation.transform.position + spawnOffset, Quaternion.identity);
+				switchPowerUp = true;
+			}
+			else if (switchPowerUp == true) 
+			{
+				Instantiate (KittyStrike, centreSpawnLocation.transform.position + spawnOffset, Quaternion.identity);
+				switchPowerUp = false;
+			}
 		}
 	}
 
@@ -123,7 +134,7 @@ public class PurrUpMewnager : MonoBehaviour {
 		}
 		else if (powerUpNum == 3) 
 		{
-			type = "Cheese";
+			type = "Centre";
 		}
 		//calls the spawn method
 		Spawn (randomLocationID, type);

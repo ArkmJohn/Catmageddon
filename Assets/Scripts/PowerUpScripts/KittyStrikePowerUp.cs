@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheesePowerUp : PowerUpEffectApplication {
+public class KittyStrikePowerUp : PowerUpEffectApplication {
 
 	public string teamType;
 
@@ -15,7 +15,7 @@ public class CheesePowerUp : PowerUpEffectApplication {
 
 	public override void ApplyPowerUpEffect (int playerID) 
 	{
-		//SpawnMice
+		//DropDaBomb
 		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
 		Destroy (this.gameObject);
 	}
