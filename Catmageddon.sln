@@ -1,13 +1,13 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{45733B69-DFB2-7D08-1734-FFC2B3A11DED}") = "Catmageddon", "Assembly-CSharp-firstpass.csproj", "{EC808EA8-D02F-721E-C74E-A9274E6278B3}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catmageddon", "Assembly-CSharp-firstpass.csproj", "{EC808EA8-D02F-721E-C74E-A9274E6278B3}"
 EndProject
-Project("{45733B69-DFB2-7D08-1734-FFC2B3A11DED}") = "Catmageddon", "Assembly-CSharp.csproj", "{A521B0A8-2F23-6B71-DA2D-696C679EE38A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catmageddon", "Assembly-CSharp.csproj", "{A521B0A8-2F23-6B71-DA2D-696C679EE38A}"
 EndProject
-Project("{45733B69-DFB2-7D08-1734-FFC2B3A11DED}") = "Catmageddon", "Assembly-CSharp-Editor-firstpass.csproj", "{9FF2C5D4-435B-04E7-63BB-AD6F1F2A6457}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catmageddon", "Assembly-CSharp-Editor-firstpass.csproj", "{9FF2C5D4-435B-04E7-63BB-AD6F1F2A6457}"
 EndProject
-Project("{45733B69-DFB2-7D08-1734-FFC2B3A11DED}") = "Catmageddon", "Assembly-CSharp-Editor.csproj", "{080C85FB-83EF-03B5-7A71-A16C35ED0078}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catmageddon", "Assembly-CSharp-Editor.csproj", "{080C85FB-83EF-03B5-7A71-A16C35ED0078}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
