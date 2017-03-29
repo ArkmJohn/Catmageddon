@@ -8,7 +8,7 @@ public class AutomaticWeapon : Weapon
 {
 
     public float AttackCooldown = 0.5f;
-    public float ProjectileSpeed = 500f;
+
     float myCoolDown;
 
     public void OnEnable()
@@ -16,7 +16,7 @@ public class AutomaticWeapon : Weapon
         myCoolDown = AttackCooldown;
     }
 
-    public override void ArmWeapon(GameObject spawnPoint, GameObject myTank)
+    public override void ArmWeapon(GameObject spawnPoint, GameObject myTank, PunTeams.Team myTeam)
     {
         myCoolDown -= Time.deltaTime;
 
@@ -34,12 +34,12 @@ public class AutomaticWeapon : Weapon
                 bulletClone = PhotonNetwork.Instantiate(ammoName, spawnPoint.transform.position, spawnPoint.transform.rotation, 0);
             }
             Vector3 direction = spawnPoint.transform.forward;
+            bulletClone.GetComponent<WeaponCollider>().team = myTeam;
+            bulletClone.GetComponent<WeaponCollider>().Damage = damage;
 
             bulletClone.GetComponent<Rigidbody>().AddForce(direction * ProjectileSpeed);
             Physics.IgnoreCollision(bulletClone.GetComponent<Collider>(), myTank.GetComponent<Collider>());
             myCoolDown = AttackCooldown;
         }
-
     }
-
 }

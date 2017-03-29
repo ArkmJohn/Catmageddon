@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileController : MonoBehaviour {
+public class ProjectileController : WeaponCollider {
 
     [Tooltip("Particle to be spawned in death")]
     public GameObject destroyParticle;
+    public int teamID;
 
     [Tooltip("Time til the bullet gets destroyed")]
     [SerializeField]
@@ -15,26 +16,42 @@ public class ProjectileController : MonoBehaviour {
     {
         deathTimer -= Time.deltaTime;
         if (deathTimer <= 0)
-            DestroyMe();
+        {
+            PhotonView pView = GetComponent<PhotonView>();
+            
+            pView.photonView.RPC("DestroyMe", PhotonTargets.All);
+        }
     }
     void OnTriggerEnter(Collider col)
     {
-        DestroyMe();
+        if (col.gameObject.GetComponent<CatInfo>())
+        {
+            col.gameObject.GetComponent<PhotonView>().photonView.RPC("TakeDamage", PhotonTargets.All, Damage);
+            DestroyTheObject();
+        }
+
+    }
+
+    public void DestroyTheObject()
+    {
+        PhotonView pView = GetComponent<PhotonView>();
+        pView.photonView.RPC("DestroyMe", PhotonTargets.All);
+
     }
 
     [PunRPC]
     void DestroyMe()
     {
         Instantiate(destroyParticle, transform.position, Quaternion.identity);
-        if (PhotonNetwork.isMasterClient)
-        {
-            Debug.Log("Destroying in M");
-            PhotonNetwork.Destroy(this.gameObject);
-        }
-        else
-            Debug.Log("Not M");
+        //if (PhotonNetwork.isMasterClient)
+        //{
+        //    Debug.Log("Destroying in M");
+        //    PhotonNetwork.Destroy(this.gameObject);
+        //}
+        //else
+        //    Debug.Log("Not M");
 
-        if (!PhotonNetwork.connected)
+        //if (!PhotonNetwork.connected)
             Destroy(this.gameObject);
     }
 

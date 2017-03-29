@@ -14,11 +14,18 @@ public class CatMovement : MonoBehaviour {
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        //if (PhotonNetwork.player.IsLocal)
+        //{
+        //    FindObjectOfType<CameraControl>().localPlayer = this.gameObject.transform;
+        //}
     }
 
     void FixedUpdate()
     {
-        Move();
+        if (PhotonNetwork.player.IsLocal && this.GetComponent<CatInfo>().Health > 0)
+        {
+            Move();
+        }
     }
 
     // Moves the Player

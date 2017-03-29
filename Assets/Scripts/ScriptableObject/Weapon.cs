@@ -12,9 +12,8 @@ public abstract class Weapon : ScriptableObject {
 
     [Tooltip("Damage to be given by the Character class")]
     public float damage;
-
+    public float ProjectileSpeed = 500f;
     public ParticleSystem fireParticle;
 
-    [PunRPC]
-    public abstract void ArmWeapon(GameObject spawnPoint, GameObject myTank);
+    public abstract void ArmWeapon(GameObject spawnPoint, GameObject myTank, PunTeams.Team myTeam);
 }

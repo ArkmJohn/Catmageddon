@@ -254,6 +254,11 @@
     <Compile Include="Assets\Scripts\AI\Individual\Mouse.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Steering.cs" />
     <Compile Include="Assets\Scripts\GameManagers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\CaptureTheTrashManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\CatFightManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\NetworkDeathmatchManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\ScoreManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\TrashCanValues.cs" />
     <Compile Include="Assets\Scripts\Persistance\CurrentPurrofile.cs" />
     <Compile Include="Assets\Scripts\Persistance\PurrofileHandler.cs" />
     <Compile Include="Assets\Scripts\Persistance\PurrofileUIHandler.cs" />
@@ -284,9 +289,11 @@
     <Compile Include="Assets\Scripts\Utilities\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\ParticleController.cs" />
     <Compile Include="Assets\Scripts\Utilities\ProjectileController.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PunPlayerTank.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ClassSelect.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ItemContainer.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ItemHolder.cs" />
+    <Compile Include="Assets\Scripts\Utilities\WeaponCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
@@ -298,6 +305,7 @@
     <None Include="Assets\Photon Unity Networking\readme.txt" />
     <None Include="Assets\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Plugins\release_history.txt" />
+    <None Include="Assets\Rick&apos;s Corner\Wispy Sky\ReadMe.txt" />
     <None Include="Assets\Scripts\TestScripts\Custom.shader" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />

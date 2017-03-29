@@ -20,15 +20,15 @@ public class MainMenuManager : MonoBehaviour {
 
     //public GameObject 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         Setup();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     public void Setup()
     {
@@ -65,7 +65,7 @@ public class MainMenuManager : MonoBehaviour {
 
     void SplitItems()
     {
-        foreach(Item a in items)
+        foreach (Item a in items)
         {
             if (!inventory.Contains(a))
             {
@@ -109,5 +109,20 @@ public class MainMenuManager : MonoBehaviour {
         {
             tankHolder.GetComponent<ItemContainer>().AddItem(a);
         }
+    }
+
+    public void EquipTank(int tankID)
+    {
+        if (CurrentPurrofile.Instance != null)
+        {
+            CurrentPurrofile.Instance.EquipTank(tankID);
+        }
+        FindObjectOfType<NetworkManager>().defaultTank = tankID;
+
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
