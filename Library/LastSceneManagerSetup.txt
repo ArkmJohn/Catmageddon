@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/MainMenu.unity
+- path: Assets/Rick's Corner/Neighborhood.unity
   isLoaded: 1
   isActive: 1
