@@ -22,6 +22,7 @@ public class Steering : MouseBehaviour
     public float Multiplier = 1f;
     public float negMultiplier = 1f;
     Vector3 avoidanceDirection, avoidanceDirection2;
+    public bool Isfindingnextgoal;
 
     void Start()
     {
@@ -45,6 +46,48 @@ public class Steering : MouseBehaviour
 
 
     void FixedUpdate()
+    {
+        if (!Isfindingnextgoal)
+        {
+            StartCoroutine(FindNextGoalV());
+        }
+        
+    }
+
+
+    void Seek()
+    {
+
+
+        Vector3 desiredvelocity = target.transform.position - AI.transform.position;
+        seek = desiredvelocity - RB.velocity;
+        //seek = Vector3.ClampMagnitude(seek, Maxforce);
+        RB.AddForce(seek);
+        RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed);
+     
+    }
+
+    Rigidbody TargetRB(GameObject obj)
+    {
+        return obj.GetComponent<Rigidbody>();
+    }
+
+    void Distance()
+    {
+        distance = Vector3.Distance(AI.transform.position, target.transform.position);
+
+
+        if (distance <= 1000)
+        {
+            MOV = true;
+        }
+        else
+        {
+            MOV = false;
+        }
+    }
+
+    void FindNextGoal()
     {
         if (target == null)
         {
@@ -91,41 +134,15 @@ public class Steering : MouseBehaviour
 
             //Debug.Log(MOV?"seek":"arrive");
         }
+        Isfindingnextgoal = false;
     }
 
-
-    void Seek()
+    public IEnumerator FindNextGoalV()
     {
-
-
-        Vector3 desiredvelocity = target.transform.position - AI.transform.position;
-        seek = desiredvelocity - RB.velocity;
-        //seek = Vector3.ClampMagnitude(seek, Maxforce);
-        RB.AddForce(seek);
-        RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed);
-     
+        Isfindingnextgoal = true;
+        yield return new WaitForSeconds(2.0f);
+        FindNextGoal();
     }
-
-    Rigidbody TargetRB(GameObject obj)
-    {
-        return obj.GetComponent<Rigidbody>();
-    }
-
-    void Distance()
-    {
-        distance = Vector3.Distance(AI.transform.position, target.transform.position);
-
-
-        if (distance <= 1000)
-        {
-            MOV = true;
-        }
-        else
-        {
-            MOV = false;
-        }
-    }
-
 
     void Arrive()
     {

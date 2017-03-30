@@ -1,8 +1,1 @@
-sceneSetups:
-<<<<<<< HEAD
-- path: Assets/Scenes/AITestScene.unity
-=======
-- path: Assets/Scenes/MainMenu.unity
->>>>>>> 221daeda6b213f64b37e4e6ba84bbca5d87be37c
-  isLoaded: 1
-  isActive: 1
+sceneSetups: []

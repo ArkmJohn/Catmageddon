@@ -111,6 +111,33 @@ public class MouseBehaviour : CharInfo {
         return Vector3.Distance(this.transform.position, TargetObj.transform.position);
     }
 
+    public void DefendDominion()
+    {
+        FlagCapture[] Flags = FindObjectsOfType<FlagCapture>();
+        List<FlagCapture> MyFlags = new List<FlagCapture>();
+
+        foreach (FlagCapture f in Flags)
+        {
+            if (f.CaptureTeam == MyTeam)
+            {
+                MyFlags.Add(f);
+            }
+        }
+/*
+        foreach (FlagCapture a in MyFlags)
+        {
+
+        }
+
+    } */ //for john to do
+
+  /*  public void DefendCTT()
+    {
+
+    }
+
+*/ // for john to do
+
     /*
     #region OldStuff
     public IEnumerator AttackCheck()
