@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -70,20 +67,14 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>Library\ScriptAssemblies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Photon3Unity3D">
       <HintPath>Assets\Plugins\Photon3Unity3D.dll</HintPath>
@@ -252,8 +243,14 @@
     <Compile Include="Assets\Rick&apos;s Corner\Scripts\FlagCapture.cs" />
     <Compile Include="Assets\Rick&apos;s Corner\Scripts\Movement.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Mouse.cs" />
+    <Compile Include="Assets\Scripts\AI\Individual\MouseBehaviour.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Steering.cs" />
+    <Compile Include="Assets\Scripts\GameManagers\CharInfo.cs" />
     <Compile Include="Assets\Scripts\GameManagers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\CaptureTheTrashManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\CatFightManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\ScoreManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\TrashCanValues.cs" />
     <Compile Include="Assets\Scripts\Persistance\CurrentPurrofile.cs" />
     <Compile Include="Assets\Scripts\Persistance\PurrofileHandler.cs" />
     <Compile Include="Assets\Scripts\Persistance\PurrofileUIHandler.cs" />
@@ -298,6 +295,7 @@
     <None Include="Assets\Photon Unity Networking\readme.txt" />
     <None Include="Assets\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\Plugins\release_history.txt" />
+    <None Include="Assets\Rick&apos;s Corner\Wispy Sky\ReadMe.txt" />
     <None Include="Assets\Scripts\TestScripts\Custom.shader" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />

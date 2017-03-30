@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class CharInfo : Photon.PunBehaviour {
 
-    public int TeamID;
-
-
+    public PunTeams.Team MyTeam;
 
 
 }

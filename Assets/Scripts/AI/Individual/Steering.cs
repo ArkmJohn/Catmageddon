@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Steerings : MouseBehaviour
+public class Steering : MouseBehaviour
 {
 
-    public GameObject AI;
+    public GameObject AI, DefendingObject;
     public GameObject target; //has been changed to dynamic
     public Vector3 seek;
     public Rigidbody RB, targetRB; //has been changed to dynamic rigidbody
@@ -30,12 +30,12 @@ public class Steerings : MouseBehaviour
         coof = 1f;
         distance = new float();
         AI = this.gameObject;
-        target = CurrentTarget;
+        //target = CurrentTarget;
         RB = gameObject.GetComponent<Rigidbody>();
         //AIvelocity = new Vector3();
         //Desiredvelocity = new Vector3();
         seek = new Vector3();
-        targetRB = target.GetComponent<Rigidbody>();
+        //targetRB = target.GetComponent<Rigidbody>();
 
         targetmaxspeed = 10; // NEEDS TO BE REPLACED WITH THE ACTUAL MAX VELOCITY!!!
         frames = new int();  // this will be the number of frames which is needed to predict HOW much of future
@@ -46,26 +46,51 @@ public class Steerings : MouseBehaviour
 
     void FixedUpdate()
     {
-
-        //Desire();
-        Distance();
-
-
-        if (MOV == true)
+        if (target == null)
         {
-            Arrive();
-            Debug.Log("Arrive");
-        }
-        else
-        {
-            //Seek();
-            predictedVel();
-            Debug.Log("Seek");
-        }
-        ObstacleAvoidance();
-        transform.LookAt(transform.position + RB.velocity);
+            switch (Mymousestates)
+            {
+                case MouseStates.ATTACKING:
+                    target = FindTarget();
+                    distance = DistanceToTarget(target);
+                    targetRB = target.GetComponent<Rigidbody>();
+                    break;
 
-        //Debug.Log(MOV?"seek":"arrive");
+                case MouseStates.DEFENDING:
+                    target = FindTarget(DefendingObject);
+                    distance = DistanceToTarget(target);
+                    targetRB = target.GetComponent<Rigidbody>();
+
+                    break;
+
+                default:
+                    Debug.Log("This is not a valid State");
+                    break;
+            }
+
+
+        }
+        else if (target != null)
+        {
+            Distance();
+
+
+
+            if (MOV == true)
+            {
+                Arrive();
+                Debug.Log("Arrive");
+            }
+            else
+            {
+                predictedVel();
+                Debug.Log("Seek");
+            }
+            ObstacleAvoidance();
+            transform.LookAt(transform.position + RB.velocity);
+
+            //Debug.Log(MOV?"seek":"arrive");
+        }
     }
 
 
@@ -81,6 +106,10 @@ public class Steerings : MouseBehaviour
      
     }
 
+    Rigidbody TargetRB(GameObject obj)
+    {
+        return obj.GetComponent<Rigidbody>();
+    }
 
     void Distance()
     {
