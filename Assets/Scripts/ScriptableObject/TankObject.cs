@@ -11,7 +11,7 @@ public class TankObject : Item
     [Tooltip("Side weapons are the SMG's while the Main weapons are special weapons that can be varied")]
     public Weapon SideWeapon, MainWeapon;
     public float Speed;
-    public float Health;
+    public int Health;
     [Tooltip("Base is 0.5f to be used for the attack speed of the main weapon")]
     public float MainCoolDown = 0.5f;
     [Tooltip("FireMode for the different types of firetypes like Beam, Single Fire or Automatic")]

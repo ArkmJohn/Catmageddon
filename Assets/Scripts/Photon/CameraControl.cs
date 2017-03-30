@@ -9,49 +9,52 @@ public class CameraControl : MonoBehaviour
 
     public float distance = 7.0f;
     public float height = 3.0f;
-    public float heightSmoothLag = 0.3f;
-    public Vector3 centerOffset = Vector3.zero;
-    public bool followOnStart = false;
+    public Transform localPlayer;
+    public float velocity = 5000;
 
+    Transform Target;
     Transform cameraT;
-    bool isFollowing;
-    float heightVel;
-    float targetHeight = 100000;
+    bool isFollowing; 
 
     #endregion
 
     // Use this for initialization
     void Start ()
     {
-        // Start following the target if wanted.
-        if (followOnStart)
-        {
-            InitFollowing();
-        }
+
     }
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        if (cameraT == null && isFollowing)
+        if (localPlayer != null)
         {
-            InitFollowing();
-        }
+            if (Target == null)
+            {
+                CreateObject();
 
-        if (isFollowing)
-        {
-            //Apply();
+            }
+            if(cameraT == null)
+                cameraT = Camera.main.gameObject.transform;
+            else
+                InitFollowing();
         }
 
 	}
 
     void InitFollowing()
     {
-        cameraT = Camera.main.transform;
-        isFollowing = true;
+        Vector3 target = Target.position;
+        cameraT.transform.position = Vector3.Lerp(cameraT.position, target, Time.deltaTime * velocity);
+        cameraT.transform.LookAt(localPlayer);
 
-        //
-        float oldHeightSmooth = heightSmoothLag;
-        heightSmoothLag = 0.001f;
+    }
 
+    void CreateObject()
+    {
+        GameObject CameraTarget = new GameObject("TargetCamPos");
+
+        CameraTarget.transform.position = localPlayer.position + new Vector3(0, height, -distance);
+        CameraTarget.transform.SetParent(localPlayer);
+        Target = CameraTarget.transform;
     }
 }

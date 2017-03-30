@@ -8,6 +8,6 @@ public class CTTStart : MonoBehaviour {
 
     public void StartGame()
     {
-        TankGameManager.StartGame(tankID);
+        FindObjectOfType<TankGameManager>().StartGame(tankID);
     }
 }

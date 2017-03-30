@@ -2,213 +2,341 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CatInfo : Photon.PunBehaviour, IPunObservable {
+public class CatInfo : Photon.PunBehaviour, IPunObservable
+{
+    #region Public Variables
 
-    [Tooltip("Can be filled by the Tank ID in the game manager. It starts from 0. Provided there is already a set Game Manager and tanks for it to hold")]
-    public int myDefaultTankID;
-
+    [Tooltip("Max Health of the Player")]
     public float maxHealth;
-    [Tooltip("Cooldown for the amount of time given for the player before it is damage next by a weapon")]
-    public float damageCooldown = 0.5f;
-    [Tooltip("The current Health of our player")]
-    public float health;
-    public static GameObject LocalCatInstance;
-    float damageCD;
-    bool gotDamaged = false;
-    TankObject myTankBP;
+    [Tooltip("Current Health of the Player")]
+    public float Health;
+    [Tooltip("Current Team this player is in")]
+    public PunTeams.Team MyTeam;
+    [Tooltip("Health Fill Image that wil be used for health indicator")]
+    public Image HealthContent;
+    [Tooltip("This Players Name Text UI")]
+    public Text NameText;
 
-    #region Unity Callbacks
+    [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
+    public static GameObject LocalPlayerInstance;
 
+    [Tooltip("The Firemode of the CurrentPlayer")]
+    public FireMode MyFireMode;
+    
+    #endregion
+
+    #region Private Variables
+
+    // True when Side or Main is Firing
+    bool IsFiringSide;
+    bool IsFiringMain;
+
+    // Cooldows for the weapons
+    float maxCDSide = 0.5f;
+    float CDSide = 0.5f;
+    float maxCDMain = 0.5f;
+    float CDMain = 0.5f;
+
+    int myTankID;
+    string MyName;
+
+    // Tank Object for the current player
+    TankObject MyTankObject;
+
+    // Beam Weapon if the player has a beam weapon
+    GameObject Beam = null;
+    GameObject SideWeaponPrefab = null; // Side Weapon Prefab Holder
+    GameObject MainWeaponPrefab = null; // Main Weapon Prefab if the player is not beam type firemode
+
+    // Projectile Spawn Point
+    GameObject ProjectileSpawnPoint;
+
+    #endregion
+
+    #region MonoBehavior CallBacks
     void Awake()
     {
-        // #Important
-        // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
-        if (PhotonNetwork.connected)
+        if (photonView.isMine)
         {
-            if(photonView.isMine)
-                CatInfo.LocalCatInstance = this.gameObject;
+            LocalPlayerInstance = gameObject;
         }
-        else
-            CatInfo.LocalCatInstance = this.gameObject;
-        // #Critical
-        // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
-        DontDestroyOnLoad(this.gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
-        //SetUpTank(myDefaultTankID);
+
+        if (photonView.isMine)
+        {
+            MyTeam = PhotonNetwork.player.GetTeam();
+            // Set Up Tank
+            this.myTankID = PhotonNetwork.player.GetTank();
+            this.MyName = PhotonNetwork.player.NickName;
+        }
+        
+        SetupTank(myTankID);
+
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (gotDamaged)
+        if (photonView.isMine)
         {
-
-            if (damageCD <= 0)
+            if (!IsDead())
             {
-                gotDamaged = false;
-                damageCD = damageCooldown;
+                if (this.GetComponent<CameraControl>().localPlayer == null)
+                {
+                    this.GetComponent<CameraControl>().localPlayer = this.transform;
+                }
+                this.ProcessInput();
             }
             else
             {
-                damageCD -= Time.deltaTime;
+                FindObjectOfType<GameManager>().PlayerDied(PhotonNetwork.player);
+                ResetPlayer();
             }
         }
 
-        if (PhotonNetwork.connected && photonView.isMine)
+        CDSide -= Time.deltaTime;
+        CDMain -= Time.deltaTime;
+
+        if (HealthContent != null)
         {
-            Debug.Log("Player ID is " + PhotonNetwork.player.ID);
-        }
-    }
-    #endregion
-
-    #region Public Methods
-    [ContextMenu("Reset Tank")]
-    public void ResetTank()
-    {
-        
-        SetUpTank(myDefaultTankID);
-    }
-
-    [PunRPC]
-    public void SetUpTank(int tankIndex)
-    {
-        if (!PhotonNetwork.connected)
-        {
-            TankObject myTank = FindObjectOfType<TankGameManager>().TankPrefabs[tankIndex];
-            GameObject tank = Instantiate(myTank.TankPrefab, this.transform.position, Quaternion.identity);
-            tank.transform.SetParent(this.transform);
-
-            maxHealth = myTank.Health;
-            health = maxHealth;
-            damageCD = damageCooldown;
-            GetComponent<CatWeapons>().SetUpWeapons(tank, myTank);
-            myTankBP = myTank;
-            GetComponent<CatMovement>().speed = myTankBP.Speed;
-            SpawnCatModel(tank.transform.Find("Turret/CatSpawn").gameObject, tank.transform.Find("Turret").gameObject);
-        }
-        else if (photonView.isMine && PhotonNetwork.connected)
-        {
-            Debug.Log(tankIndex);
-            TankObject myTank = FindObjectOfType<TankGameManager>().TankPrefabs[tankIndex];
-            myTankBP = myTank;
-            GameObject tank = PhotonNetwork.Instantiate(myTank.TankPrefab.name, this.transform.position, Quaternion.identity, 0);
-            tank.transform.SetParent(this.transform);
-            SpawnCatModel(tank.transform.Find("Turret/CatSpawn").gameObject, tank.transform.Find("Turret").gameObject);
-            maxHealth = myTank.Health;
-            health = maxHealth;
-            damageCD = damageCooldown;
-            GetComponent<CatWeapons>().SetUpWeapons(tank, myTank);
-            
-            GetComponent<CatMovement>().speed = myTankBP.Speed;
-        }
-
-    }
-
-    public void GetDamaged(float damage)
-    {
-        if (!gotDamaged)
-        {
-            Debug.Log("got Damaged");
-            gotDamaged = true;
-
-            health -= damage;
-            if (health <= 0)
+            if (!IsDead())
             {
-                Dead();
+                float temp = this.Health / this.maxHealth;
+                Debug.Log(temp);
+                HealthContent.fillAmount = temp;
+            }
+            else
+                HealthContent.fillAmount = 0;
+        }
+
+        if (this.Beam != null && this.IsFiringMain != this.Beam.GetActive()) // Calls the Main Weapons
+        {
+            this.Beam.SetActive(this.IsFiringMain);
+        }
+        if (this.Beam == null && this.MainWeaponPrefab != null && this.IsFiringMain) // Calls the main weapon if not beam
+        {
+            if (CDMain <= 0)
+            {
+                //UseMainWeapon("Main");
+                this.photonView.RPC("UseMainWeapon", PhotonTargets.All, "Main");
+                CDMain = maxCDMain;
             }
         }
-    }
-    #endregion
-
-    #region Private Methods
-    [PunRPC]
-    void SpawnCatModel(GameObject catSpawnPoint, GameObject parent)
-    {
-        // TODO: Spawn based on the profile
-        GameObject cat;
-        if (!PhotonNetwork.connected)
+        if (this.SideWeaponPrefab != null && this.IsFiringSide)
         {
-            cat = Instantiate(myTankBP.CatPrefab, catSpawnPoint.transform.position, Quaternion.identity);
+            if (CDSide <= 0)
+            {
+                //UseSideWeapon("Side");
+                this.photonView.RPC("UseSideWeapon", PhotonTargets.All, "Side");
+                CDSide = maxCDSide;
+            }
         }
-        else if (photonView.isMine && PhotonNetwork.connected)
-        {
-            cat = PhotonNetwork.Instantiate(myTankBP.CatPrefab.name, catSpawnPoint.transform.position, Quaternion.identity, 0);
-            cat.transform.SetParent(parent.transform);
-            cat.transform.localScale = Vector3.one * 100;
-            cat.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0));
-        }
-        
+
+        if (this.NameText != null && this.NameText.text != this.MyName)
+            this.NameText.text = this.MyName;
     }
 
-    // TODO: RPC Please
-    void Dead()
+    void OnCollisionEnter(Collision other)
     {
-        Debug.Log("An Idiot Died");
-    }
-    #endregion
-
-    #region Collision Methods
-    void OnTriggerEnter(Collider other)
-    {
+        // We dont do anything if we're not the local player
         if (!photonView.isMine)
         {
             return;
         }
-        if (other.gameObject.layer != 8)
+
+        if (other.gameObject.tag != "Weapon")
         {
             return;
         }
-		if (other.gameObject.tag == "PowerUp") 
-		{
-			other.gameObject.GetComponent<PowerUpEffectApplication> ().ApplyPowerUpEffect (PhotonNetwork.player.ID);
-		}
-		//Pickup interaction for the trash cans
-		if (other.gameObject.tag == "TrashCan") 
-		{
-			if (other.gameObject.GetComponent<TrashCanValues> ().GetPickUpState () == false)
-			{
-//				string teamIdentifier = other.gameObject.GetComponent<TrashCanValues> ().teamID;
-//				if (teamIdentifier == "blueTeam" && Player is red) 
-//				{
-//					GameObject.FindGameObjectWithTag ("TrashCanManager").GetComponent<CaptureTheTrashManager> ().PickUpTrashCan (this.transform, teamIdentifier);
-//				}
-//				else if (teamIdentifier == "redTeam" && Player is blue) 
-//				{
-//					GameObject.FindGameObjectWithTag ("TrashCanManager").GetComponent<CaptureTheTrashManager> ().PickUpTrashCan (this.transform, teamIdentifier);
-//				}
-			}
-		}
 
-        Debug.Log("Warning: should Apply Damage");
-        //GetDamaged(other.GetComponent<ProjectileController>().damage);
-
+        //this.Health -= other.gameObject.GetComponent<WeaponCollider>().Damage;
     }
 
     void OnTriggerStay(Collider other)
     {
+        // We dont do anything if we're not the local player
         if (!photonView.isMine)
         {
             return;
         }
-        if (other.gameObject.layer != 8 )
+
+        if (other.gameObject.tag != "Weapon")
         {
             return;
         }
 
-        Debug.Log("Warning: should Apply Damage");
+        this.Health -= other.GetComponent<WeaponCollider>().Damage * Time.deltaTime;
+    }
+    #endregion
 
-        // GetDamaged(other.GetComponent<ProjectileController>().damage);
+    #region Public Methods
+
+    [PunRPC]
+    public void TakeDamage(float DamageValue)
+    {
+        this.Health -= DamageValue;
+    }
+
+    public bool IsDead()
+    {
+        if (this.Health <= 0)
+            return true;
+        else
+            return false;
+    }
+
+    #endregion
+    
+    #region Private Methods
+
+    void SetupTank(int TankIndex)
+    {
+        TankObject myTank = GameManager.Instance.TankPrefabs[TankIndex];
+        MyTankObject = myTank;
+        // Spawns the tank Object
+        GameObject Tank = PhotonNetwork.Instantiate(MyTankObject.TankPrefab.name, this.transform.position, this.transform.rotation, 0);
+        Tank.transform.SetParent(this.transform);
+
+        // Sets the Health
+        this.maxHealth = myTank.Health;
+        this.Health = maxHealth;
+
+        this.MyFireMode = MyTankObject.MainWeaponFireMode;
+        SetUpWeapons(Tank);
+    }
+
+    void SetUpWeapons(GameObject Tank)
+    {
+        Debug.Log("Setting Up Weapons");
+        this.ProjectileSpawnPoint = Tank.transform.Find("Turret/Spawn").gameObject;
+
+        this.SideWeaponPrefab = this.MyTankObject.SideWeapon.ammo;
+
+        if (this.MyFireMode == FireMode.Beam)
+        {
+            this.Beam = PhotonNetwork.Instantiate(MyTankObject.MainWeapon.ammoName, ProjectileSpawnPoint.transform.position, Quaternion.identity, 0);
+            this.Beam.transform.SetParent(ProjectileSpawnPoint.transform);
+            this.Beam.SetActive(false);
+        }
+        else
+        {
+            this.MainWeaponPrefab = this.MyTankObject.MainWeapon.ammo;
+        }
+    }
+
+    void ProcessInput()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (!this.IsFiringSide)
+            {
+                this.IsFiringSide = true;
+            }
+        }
+        if (Input.GetButtonUp("Fire1"))
+        {
+            if (this.IsFiringSide)
+            {
+                this.IsFiringSide = false;
+            }
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (!this.IsFiringMain)
+            {
+                this.IsFiringMain = true;
+            }
+        }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            if (this.IsFiringMain)
+            {
+                this.IsFiringMain = false;
+            }
+        }
+    }
+
+    [PunRPC]
+    void UseSideWeapon(string message)
+    {
+        if (!photonView.isMine)
+            return;
+
+        GameObject bulletClone = PhotonNetwork.Instantiate(SideWeaponPrefab.name, ProjectileSpawnPoint.transform.position, Quaternion.identity, 0);
+        //GameObject bulletClone = Instantiate(SideWeaponPrefab, ProjectileSpawnPoint.transform.position, ProjectileSpawnPoint.transform.rotation);
+        Vector3 direction = ProjectileSpawnPoint.transform.forward;
+
+        bulletClone.GetComponent<WeaponCollider>().team = this.MyTeam;
+        bulletClone.GetComponent<WeaponCollider>().Damage = this.MyTankObject.SideWeapon.damage;
+
+        bulletClone.GetComponent<Rigidbody>().AddForce(direction * MyTankObject.SideWeapon.ProjectileSpeed);
+        //Physics.IgnoreCollision(bulletClone.GetComponent<Collider>(), this.GetComponent<Collider>());
+    }
+
+    [PunRPC]
+    void UseMainWeapon(string message)
+    {
+        if (!photonView.isMine)
+            return;
+
+        GameObject bulletClone = PhotonNetwork.Instantiate(MainWeaponPrefab.name, ProjectileSpawnPoint.transform.position, Quaternion.identity, 0);
+        //GameObject bulletClone = Instantiate(MainWeaponPrefab, ProjectileSpawnPoint.transform.position, ProjectileSpawnPoint.transform.rotation);
+        Vector3 direction = ProjectileSpawnPoint.transform.forward;
+
+        bulletClone.GetComponent<WeaponCollider>().team = this.MyTeam;
+        bulletClone.GetComponent<WeaponCollider>().Damage = this.MyTankObject.MainWeapon.damage;
+
+        bulletClone.GetComponent<Rigidbody>().AddForce(direction * MyTankObject.MainWeapon.ProjectileSpeed);
+        //Physics.IgnoreCollision(bulletClone.GetComponent<Collider>(), this.GetComponent<Collider>());
+    }
+
+    void ResetPlayer()
+    {
+        // set Transform
+        this.transform.position = FindObjectOfType<GameManager>().SpawnPoints[PhotonNetwork.player.ID - 1].transform.position;
+        this.transform.rotation = FindObjectOfType<GameManager>().SpawnPoints[PhotonNetwork.player.ID - 1].transform.rotation;
+
+        Health = maxHealth;
+
     }
 
     #endregion
 
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    #region IPunObservable implementation
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        throw new NotImplementedException();
+        if (stream.isWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(this.IsFiringMain);
+            stream.SendNext(this.IsFiringSide);
+            stream.SendNext(this.Health);
+            stream.SendNext(this.CDMain);
+            stream.SendNext(this.CDSide);
+            stream.SendNext(this.MyName);
+            stream.SendNext(this.myTankID);
+        }
+        else
+        {
+            // Network player, receive data
+            this.IsFiringMain = (bool)stream.ReceiveNext();
+            this.IsFiringSide = (bool)stream.ReceiveNext();
+            this.Health = (float)stream.ReceiveNext();
+            this.CDMain = (float)stream.ReceiveNext();
+            this.CDSide = (float)stream.ReceiveNext();
+            this.MyName = (string)stream.ReceiveNext();
+            this.myTankID = (int)stream.ReceiveNext();
+        }
     }
 
+    #endregion
 }

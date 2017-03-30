@@ -9,6 +9,7 @@ public class CurrentPurrofile : MonoBehaviour {
     public List<int> inventory;
     public string invStringHolder;
     public List<int> equipped;
+    public int equippedTank;
     public string eqStringHolder;
     public string username;
     public int cash;
@@ -56,6 +57,7 @@ public class CurrentPurrofile : MonoBehaviour {
         cash = cashI;
         level = levelI;
         xp = xpI;
+        equippedTank = equipped[0];
         this.username = username;
         PurrofileHandler.Instance.GoToMainMenu();
 
@@ -72,5 +74,10 @@ public class CurrentPurrofile : MonoBehaviour {
         temp.Sort();
 
         return temp;
+    }
+
+    public void EquipTank(int a)
+    {
+        equippedTank = a;
     }
 }

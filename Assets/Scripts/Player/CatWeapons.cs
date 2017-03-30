@@ -12,6 +12,8 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
     [Tooltip("for the SpawnPoint of the Bullets")]
     public GameObject projectileSpawnTransform;
 
+    public PunTeams.Team myTeam;
+
     TankObject myTank;
     [SerializeField]
     GameObject beamWeapon; // Gets filled when the tank has the beam firemode
@@ -23,22 +25,36 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
 
     #region Unity Callbacks
 
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
-        if (hasSetup && beamWeapon)
+        if (photonView.isMine && this.hasSetup)
         {
-            if (beamActive && beamWeapon != null)
-            {
-                beamWeapon.SetActive(true);
-            }
-            else if (beamWeapon.activeSelf && !beamActive)
-            {
-                beamWeapon.SetActive(false);
-            }
-        }
-        if (hasSetup)
             UseMyWeapons();
+
+            if ((PhotonNetwork.player.ID + 1) % 2 == 0)
+            {
+                PhotonNetwork.player.SetTeam(PunTeams.Team.blue);
+            }
+            else
+                PhotonNetwork.player.SetTeam(PunTeams.Team.red);
+        }
+
+        if (this.IsFiringSide)
+        {
+            this.myTank.SideWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, PhotonNetwork.player.GetTeam());
+        }
+
+        if (this.beamWeapon == null && this.IsFiringMain)
+            this.myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, PhotonNetwork.player.GetTeam());
+
+        if(this.beamWeapon != null && this.IsFiringMain != this.beamWeapon.GetActive())
+                this.beamWeapon.SetActive(this.IsFiringMain);
+        
+        if(PhotonNetwork.player.IsLocal && myTeam == PunTeams.Team.none)
+        {
+            myTeam = PhotonNetwork.player.GetTeam();
+        }
     }
 
     #endregion
@@ -47,40 +63,63 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
 
     public void SetUpWeapons(GameObject tank, TankObject _myTank)
     {
+        Debug.Log("Setting up weapons");
         myTank = _myTank;
         projectileSpawnTransform = tank.transform.Find(spawnPointDestination).gameObject;
         MainWeaponCooldown = myTank.MainCoolDown;
         if (myTank.MainWeaponFireMode == FireMode.Beam)
         {
-            myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject);
+            myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, PhotonNetwork.player.GetTeam());
             beamWeapon = projectileSpawnTransform.transform.GetChild(0).gameObject;
             beamWeapon.SetActive(false);
         }
         hasSetup = true;
     }
 
+
+    public bool IsFiringSide;
+    public bool IsFiringMain;
+
     public void UseMyWeapons()
     {
-        if (!PhotonNetwork.connected)
+        if (Input.GetButtonDown("Fire1"))
         {
-            if (Input.GetButton("Fire1"))
+            //myTank.SideWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, GetComponent<CatInfo>().teamID, GetComponent<PhotonView>());
+            if (!this.IsFiringSide)
             {
-                myTank.SideWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject);
+                this.IsFiringSide = true;
             }
-            ControlMainWeapon();
         }
-        else if (photonView.isMine)
+        if (Input.GetButtonUp("Fire1"))
         {
-            if (Input.GetButton("Fire1"))
+            if (this.IsFiringSide)
             {
-                myTank.SideWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject);
+                this.IsFiringSide = false;
             }
-            ControlMainWeapon();
         }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            //myTank.SideWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, GetComponent<CatInfo>().teamID, GetComponent<PhotonView>());
+            if (!this.IsFiringMain)
+            {
+                this.IsFiringMain = true;
+            }
+        }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            if (this.IsFiringMain)
+            {
+                this.IsFiringMain = false;
+            }
+        }
+
+        //ControlMainWeapon();
     }
 
     #endregion
 
+    /*
     #region Private Methods
 
     void ControlMainWeapon()
@@ -98,7 +137,7 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
                     // If we can fire and the cd is below zero
                     if (MainWeaponCooldown <= 0)
                     {
-                        myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject);
+                        myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, GetComponent<CatInfo>().teamID, GetComponent<PhotonView>());
                         MainWeaponCooldown = myTank.MainCoolDown;
                     }
                     else
@@ -109,7 +148,7 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
             case FireMode.Automatic:
                 if (Input.GetButton("Fire2"))
                 {
-                    myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject);
+                    myTank.MainWeapon.ArmWeapon(projectileSpawnTransform, this.gameObject, GetComponent<CatInfo>().teamID, GetComponent<PhotonView>());
                 }
                 break;
 
@@ -133,7 +172,7 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
     }
 
     #endregion
-
+*/
     #region IpunObservable Methods
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -141,12 +180,18 @@ public class CatWeapons : Photon.PunBehaviour, IPunObservable
         if (stream.isWriting)
         {
             // We own this player: send the others our data
-            stream.SendNext(beamActive);
+            //stream.SendNext(beamActive);
+            stream.SendNext(IsFiringMain);
+            stream.SendNext(IsFiringSide);
+            stream.SendNext(beamWeapon.GetActive());
         }
         else
         {
             // Network player, receive data
-            this.beamActive = (bool)stream.ReceiveNext();
+            //this.beamActive = (bool)stream.ReceiveNext();
+            this.IsFiringMain = (bool)stream.ReceiveNext();
+            this.IsFiringSide = (bool)stream.ReceiveNext();
+            this.beamWeapon.SetActive((bool)stream.ReceiveNext());
         }
 
     }

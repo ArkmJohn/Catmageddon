@@ -249,6 +249,10 @@
     <Compile Include="Assets\Scripts\GameManagers\GameManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\CaptureTheTrashManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\CatFightManager.cs" />
+<<<<<<< HEAD
+=======
+    <Compile Include="Assets\Scripts\GameModes\NetworkDeathmatchManager.cs" />
+>>>>>>> 221daeda6b213f64b37e4e6ba84bbca5d87be37c
     <Compile Include="Assets\Scripts\GameModes\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\TrashCanValues.cs" />
     <Compile Include="Assets\Scripts\Persistance\CurrentPurrofile.cs" />
@@ -281,9 +285,11 @@
     <Compile Include="Assets\Scripts\Utilities\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\ParticleController.cs" />
     <Compile Include="Assets\Scripts\Utilities\ProjectileController.cs" />
+    <Compile Include="Assets\Scripts\Utilities\PunPlayerTank.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ClassSelect.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ItemContainer.cs" />
     <Compile Include="Assets\Scripts\Utilities\UI\ItemHolder.cs" />
+    <Compile Include="Assets\Scripts\Utilities\WeaponCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
