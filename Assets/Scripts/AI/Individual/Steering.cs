@@ -116,7 +116,7 @@ public class Steering : MouseBehaviour
         distance = Vector3.Distance(AI.transform.position, target.transform.position);
 
 
-        if (distance <= 10)
+        if (distance <= 1000)
         {
             MOV = true;
         }

@@ -249,10 +249,7 @@
     <Compile Include="Assets\Scripts\GameManagers\GameManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\CaptureTheTrashManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\CatFightManager.cs" />
-<<<<<<< HEAD
-=======
     <Compile Include="Assets\Scripts\GameModes\NetworkDeathmatchManager.cs" />
->>>>>>> 221daeda6b213f64b37e4e6ba84bbca5d87be37c
     <Compile Include="Assets\Scripts\GameModes\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\TrashCanValues.cs" />
     <Compile Include="Assets\Scripts\Persistance\CurrentPurrofile.cs" />
