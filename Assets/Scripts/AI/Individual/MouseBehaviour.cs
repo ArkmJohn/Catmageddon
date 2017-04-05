@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseBehaviour : CharInfo {
+public class MouseBehaviour : CharInfo
+{
 
 
     public GameObject OurFlag; // Allied Flag
@@ -53,7 +54,7 @@ public class MouseBehaviour : CharInfo {
     {
         CharInfo[] Characters = FindObjectsOfType<CharInfo>();
         List<CharInfo> Enemy = new List<CharInfo>();
-        foreach(CharInfo c in Characters)
+        foreach (CharInfo c in Characters)
         {
             if (c.MyTeam != this.MyTeam)
             {
@@ -92,7 +93,7 @@ public class MouseBehaviour : CharInfo {
 
         float tempDist = 999999;
         CharInfo target = new CharInfo();
-        foreach(CharInfo E in CharacterList)
+        foreach (CharInfo E in CharacterList)
         {
             float dist = Vector3.Distance(FromObject.transform.position, E.transform.position);
 
@@ -123,106 +124,107 @@ public class MouseBehaviour : CharInfo {
                 MyFlags.Add(f);
             }
         }
-/*
-        foreach (FlagCapture a in MyFlags)
-        {
+        /*
+                foreach (FlagCapture a in MyFlags)
+                {
 
+                }
+
+            } */ //for john to do
+
+        /*  public void DefendCTT()
+          {
+
+          }
+
+      */ // for john to do
+
+        /*
+        #region OldStuff
+        public IEnumerator AttackCheck()
+        {
+            Debug.Log("getting the closest enemy");
+            IsAttacking = true;
+            yield return new WaitForSeconds(2.0f);
+            AttackcheckV();
         }
 
-    } */ //for john to do
-
-  /*  public void DefendCTT()
-    {
-
-    }
-
-*/ // for john to do
-
-    /*
-    #region OldStuff
-    public IEnumerator AttackCheck()
-    {
-        Debug.Log("getting the closest enemy");
-        IsAttacking = true;
-        yield return new WaitForSeconds(2.0f);
-        AttackcheckV();
-    }
-
-    public void AttackcheckV()
-    {
-        float tempDist = 999999;
-        CharInfo target = new CharInfo();
-        foreach (CharInfo Enemy in MyEnemies)
+        public void AttackcheckV()
         {
-            float distance = Vector3.Distance(this.transform.position, Enemy.transform.position);
-            //Distances.Add(distance);
-            //Distances.Sort();
-            if (distance <= tempDist)
+            float tempDist = 999999;
+            CharInfo target = new CharInfo();
+            foreach (CharInfo Enemy in MyEnemies)
             {
-                target = Enemy;
-                tempDist = distance;
-            }   
-        }
-        if (target != null)
-            CurrentTarget = target.gameObject;
-        IsAttacking = false;
-
-    }
-
-    public void Defendcheck()
-    {
-        if (this.Mymousestates == MouseStates.DEFENDING)
-        {
-            float Distancetoflag = Vector3.Distance(this.transform.position, OurFlag.transform.position);
-            if (Distancetoflag > 50)
-            {
-
-                //add steering force towards OURFLAG;
+                float distance = Vector3.Distance(this.transform.position, Enemy.transform.position);
+                //Distances.Add(distance);
+                //Distances.Sort();
+                if (distance <= tempDist)
+                {
+                    target = Enemy;
+                    tempDist = distance;
+                }   
             }
+            if (target != null)
+                CurrentTarget = target.gameObject;
+            IsAttacking = false;
 
         }
-    }
 
-    public IEnumerator TotalCharacterCheck()
-    {
-        IsChecking = true;
-        yield return new WaitForSeconds(3.0f);
-        TotalCharacterCheckV();
-    }
-
-    public void TotalCharacterCheckV()
-    {
-        TotalCharacters.Clear();
-        foreach (CharInfo Character in Characters) //this foreach function is for adding each element of the Characters array into the totalcharacters list
+        public void Defendcheck()
         {
-            TotalCharacters.Add(Character);
-        }
-        IsChecking = false;
-    }
-
-    public IEnumerator ChartoEnemy()
-    {
-        IsAdding = true;
-        yield return new WaitForSeconds(3.0f);
-        ChartoEnemyV();
-    }
-
-    public void ChartoEnemyV()
-    {
-        MyEnemies.Clear();
-        foreach (CharInfo Character in TotalCharacters)
-        {
-            if(Character.MyTeam != this.MyTeam)
+            if (this.Mymousestates == MouseStates.DEFENDING)
             {
-                MyEnemies.Add(Character);
+                float Distancetoflag = Vector3.Distance(this.transform.position, OurFlag.transform.position);
+                if (Distancetoflag > 50)
+                {
+
+                    //add steering force towards OURFLAG;
+                }
+
             }
         }
-        IsAdding = false;
+
+        public IEnumerator TotalCharacterCheck()
+        {
+            IsChecking = true;
+            yield return new WaitForSeconds(3.0f);
+            TotalCharacterCheckV();
+        }
+
+        public void TotalCharacterCheckV()
+        {
+            TotalCharacters.Clear();
+            foreach (CharInfo Character in Characters) //this foreach function is for adding each element of the Characters array into the totalcharacters list
+            {
+                TotalCharacters.Add(Character);
+            }
+            IsChecking = false;
+        }
+
+        public IEnumerator ChartoEnemy()
+        {
+            IsAdding = true;
+            yield return new WaitForSeconds(3.0f);
+            ChartoEnemyV();
+        }
+
+        public void ChartoEnemyV()
+        {
+            MyEnemies.Clear();
+            foreach (CharInfo Character in TotalCharacters)
+            {
+                if(Character.MyTeam != this.MyTeam)
+                {
+                    MyEnemies.Add(Character);
+                }
+            }
+            IsAdding = false;
+        }
+
+
+        #endregion
+
+        */
+
     }
-
-
-    #endregion
-
-    */
-
 }

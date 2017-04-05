@@ -22,8 +22,9 @@ public class CatMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (PhotonNetwork.player.IsLocal && this.GetComponent<CatInfo>().Health > 0)
+        if (PhotonNetwork.player.IsLocal && this.GetComponent<CatInfo>().Health > 0 && GameManager.CurrentGameState == GameState.ONGOING)
         {
+            speed = GetComponent<CatInfo>().MySpeed;
             Move();
         }
     }
@@ -42,6 +43,4 @@ public class CatMovement : MonoBehaviour {
 
         rb.MoveRotation(rb.rotation * turnRot);
     }
-
-    // TODO: Move the turret of the player
 }

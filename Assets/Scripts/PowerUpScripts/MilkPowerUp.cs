@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MilkPowerUp : PowerUpEffectApplication {
 
-	public float speedIncrease;
-
 	//Power Up Behaviour
 	//Several spawn around the map in random locations
 	//Short respawn timer
@@ -13,10 +11,12 @@ public class MilkPowerUp : PowerUpEffectApplication {
 	//Checks the player who picked it up
 	//Temporaily increases player's speed stat for it's duration
 
-	public override void ApplyPowerUpEffect (int playerID) 
-	{
-		//Speed Function
-		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
-		Destroy (this.gameObject);
-	}
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<CatInfo>() != null && PhotonNetwork.player.IsLocal)
+        {
+            other.GetComponent<CatInfo>().GotMilk();
+            DestroyMe();
+        }
+    }
 }

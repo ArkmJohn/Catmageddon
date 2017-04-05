@@ -121,6 +121,11 @@ public class MainMenuManager : MonoBehaviour {
 
     }
 
+    public void ConnectToGame(string RoomType)
+    {
+        NetworkManager.Instance.ConnectToRoom(RoomType);
+    }
+
     public void Quit()
     {
         Application.Quit();

@@ -79,8 +79,11 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Library\ScriptAssemblies\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="Photon3Unity3D">
       <HintPath>Assets\Plugins\Photon3Unity3D.dll</HintPath>
@@ -251,11 +254,11 @@
     <Compile Include="Assets\Scripts\AI\Individual\Mouse.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\MouseBehaviour.cs" />
     <Compile Include="Assets\Scripts\AI\Individual\Steering.cs" />
-    <Compile Include="Assets\Scripts\GameManagers\CharInfo.cs" />
     <Compile Include="Assets\Scripts\GameManagers\GameManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\CaptureTheTrashManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\CatFightManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\NetworkDeathmatchManager.cs" />
+    <Compile Include="Assets\Scripts\GameModes\NetworkKingOfTheTrash.cs" />
     <Compile Include="Assets\Scripts\GameModes\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\GameModes\TrashCanValues.cs" />
     <Compile Include="Assets\Scripts\Persistance\CurrentPurrofile.cs" />
@@ -267,12 +270,15 @@
     <Compile Include="Assets\Scripts\Player\CatInfo.cs" />
     <Compile Include="Assets\Scripts\Player\CatMovement.cs" />
     <Compile Include="Assets\Scripts\Player\CatWeapons.cs" />
+    <Compile Include="Assets\Scripts\Player\CharInfo.cs" />
     <Compile Include="Assets\Scripts\PowerUpScripts\CatNipPowerUp.cs" />
     <Compile Include="Assets\Scripts\PowerUpScripts\CheesePowerUp.cs" />
     <Compile Include="Assets\Scripts\PowerUpScripts\MilkPowerUp.cs" />
+    <Compile Include="Assets\Scripts\PowerUpScripts\NetworkPurrUpMewnager.cs" />
     <Compile Include="Assets\Scripts\PowerUpScripts\PowerUpEffectApplication.cs" />
+    <Compile Include="Assets\Scripts\PowerUpScripts\PowerUpSpawnLocation.cs" />
+    <Compile Include="Assets\Scripts\PowerUpScripts\PurrUpMewnager.cs" />
     <Compile Include="Assets\Scripts\PowerUpScripts\TunaPickUp.cs" />
-    <Compile Include="Assets\Scripts\PurrUpMewnager.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\AutomaticWeapon.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\Beam.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\Cat.cs" />
@@ -285,6 +291,8 @@
     <Compile Include="Assets\Scripts\Utilities\CheckEmail.cs" />
     <Compile Include="Assets\Scripts\Utilities\Enum.cs" />
     <Compile Include="Assets\Scripts\Utilities\ErrorText.cs" />
+    <Compile Include="Assets\Scripts\Utilities\KOH\Flag.cs" />
+    <Compile Include="Assets\Scripts\Utilities\LookAtCam.cs" />
     <Compile Include="Assets\Scripts\Utilities\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Utilities\ParticleController.cs" />
     <Compile Include="Assets\Scripts\Utilities\ProjectileController.cs" />
