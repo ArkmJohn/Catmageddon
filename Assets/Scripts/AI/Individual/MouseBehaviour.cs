@@ -114,23 +114,30 @@ public class MouseBehaviour : CharInfo
 
     public void DefendDominion()
     {
-        FlagCapture[] Flags = FindObjectsOfType<FlagCapture>();
-        List<FlagCapture> MyFlags = new List<FlagCapture>();
+        Flag[] Flags = FindObjectsOfType<Flag>();
+        List<Flag> MyFlags = new List<Flag>();
+        float tempdist = 999999;
 
-        foreach (FlagCapture f in Flags)
+        foreach (Flag f in Flags)
         {
-            if (f.CaptureTeam == MyTeam)
+            if (f.FlagOwner == MyTeam)
             {
                 MyFlags.Add(f);
             }
         }
-        /*
-                foreach (FlagCapture a in MyFlags)
+        Flag target;
+                foreach (Flag a in MyFlags)
                 {
+            float dist = DistanceToTarget(a.gameObject);
+            if (dist <= tempdist && Flag.)
+            {
+                target = a;
+                tempdist = dist;
+            }
+        }
 
-                }
 
-            } */ //for john to do
+            } //for john to do
 
         /*  public void DefendCTT()
           {
