@@ -11,6 +11,7 @@ public class Flag : Photon.PunBehaviour
 
     bool IsRedCapturing;
     bool IsBlueCapturing;
+   public bool IsBeingCaptured = false;
 
     Renderer MyRenderer;
 
@@ -25,6 +26,11 @@ public class Flag : Photon.PunBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(this.RedCaptureValue >0 && this.BlueCaptureValue > 0)
+        {
+            IsBeingCaptured = true;
+        }
+
         if (this.RedCaptureValue < 10 && this.BlueCaptureValue < 10)
         {
             this.FlagOwner = PunTeams.Team.none;

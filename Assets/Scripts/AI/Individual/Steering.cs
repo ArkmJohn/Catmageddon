@@ -116,7 +116,7 @@ public class Steering : MouseBehaviour
                     break;
 
                 case MouseStates.DEFENDING:
-                    target = FindTarget(DefendingObject);
+                    target = DefendDominion(target);
                     distance = DistanceToTarget(target);
                     targetRB = target.GetComponent<Rigidbody>();
 

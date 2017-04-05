@@ -112,12 +112,12 @@ public class MouseBehaviour : CharInfo
         return Vector3.Distance(this.transform.position, TargetObj.transform.position);
     }
 
-    public void DefendDominion()
+    public GameObject DefendDominion(GameObject TargetFlag)
     {
         Flag[] Flags = FindObjectsOfType<Flag>();
         List<Flag> MyFlags = new List<Flag>();
         float tempdist = 999999;
-
+        Flag dtarget = new Flag();
         foreach (Flag f in Flags)
         {
             if (f.FlagOwner == MyTeam)
@@ -125,19 +125,18 @@ public class MouseBehaviour : CharInfo
                 MyFlags.Add(f);
             }
         }
-        Flag target;
                 foreach (Flag a in MyFlags)
                 {
             float dist = DistanceToTarget(a.gameObject);
-            if (dist <= tempdist && Flag.)
+            if (dist <= tempdist && a.IsBeingCaptured)
             {
-                target = a;
+                dtarget = a;
                 tempdist = dist;
+                this.Mymousestates = MouseStates.DEFENDING;
             }
         }
-
-
-            } //for john to do
+        return dtarget.gameObject;
+    } //for john to do
 
         /*  public void DefendCTT()
           {
