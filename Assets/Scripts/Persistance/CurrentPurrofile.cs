@@ -80,4 +80,5 @@ public class CurrentPurrofile : MonoBehaviour {
     {
         equippedTank = a;
     }
+
 }

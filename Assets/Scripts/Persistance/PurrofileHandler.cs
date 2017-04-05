@@ -223,6 +223,19 @@ public class PurrofileHandler : MonoBehaviour {
         }
 
     }
+
+    public void Win()
+    {
+        StartCoroutine(ChangeValues(ID, "cash", "100"));
+        StartCoroutine(ChangeValues(ID, "experience", "10"));
+    }
+
+    public void Lose()
+    {
+        StartCoroutine(ChangeValues(ID, "cash", "50"));
+        StartCoroutine(ChangeValues(ID, "experience", "5"));
+    }
+
     #endregion
 
     #region Private.Functions
@@ -375,6 +388,8 @@ public class PurrofileHandler : MonoBehaviour {
                 invEditForm.AddField("cat_value", CurrentPurrofile.Instance.invStringHolder);
 
                 WWW invEdit = new WWW(_editURL, invEditForm);
+                yield return invEdit;
+                Debug.Log("Changed the Inventory by adding " + invEdit.text);
                 break;
 
             case "equipment":
@@ -388,6 +403,8 @@ public class PurrofileHandler : MonoBehaviour {
                 eqEditForm.AddField("cat_value", CurrentPurrofile.Instance.eqStringHolder);
 
                 WWW eqEdit = new WWW(_editURL, eqEditForm);
+                yield return eqEdit;
+                Debug.Log("Changed the Equipment by adding " + eqEdit.text);
                 break;
 
             case "cash":
@@ -400,6 +417,8 @@ public class PurrofileHandler : MonoBehaviour {
                 cashEditForm.AddField("cat_value", CurrentPurrofile.Instance.cash);
 
                 WWW cashEdit = new WWW(_editURL, cashEditForm);
+                yield return cashEdit;
+                Debug.Log("Changed the Cash by adding " + cashEdit.text);
                 break;
 
             case "level":
@@ -412,9 +431,11 @@ public class PurrofileHandler : MonoBehaviour {
                 levelEditForm.AddField("cat_value", CurrentPurrofile.Instance.level);
 
                 WWW levelEdit = new WWW(_editURL, levelEditForm);
+                yield return levelEdit;
+                Debug.Log("Changed the Level by adding " + levelEdit.text);
                 break;
 
-            case "xp":
+            case "experience":
                 // Update Locally
                 CurrentPurrofile.Instance.xp += int.Parse(value);
                 // Update In the server
@@ -424,6 +445,8 @@ public class PurrofileHandler : MonoBehaviour {
                 xpEditForm.AddField("cat_value", CurrentPurrofile.Instance.xp);
 
                 WWW xpEdit = new WWW(_editURL, xpEditForm);
+                yield return xpEdit;
+                Debug.Log("Changed the XP by adding " + xpEdit.text);
                 break;
         }
 

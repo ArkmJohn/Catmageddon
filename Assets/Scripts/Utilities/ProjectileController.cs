@@ -18,8 +18,9 @@ public class ProjectileController : WeaponCollider {
         if (deathTimer <= 0)
         {
             PhotonView pView = GetComponent<PhotonView>();
-            
-            pView.photonView.RPC("DestroyMe", PhotonTargets.All);
+
+            //pView.photonView.RPC("DestroyMe", PhotonTargets.All);
+            DestroyMe();
         }
     }
     void OnTriggerEnter(Collider col)
@@ -29,7 +30,8 @@ public class ProjectileController : WeaponCollider {
             col.gameObject.GetComponent<PhotonView>().photonView.RPC("TakeDamage", PhotonTargets.All, Damage);
             DestroyTheObject();
         }
-
+        else
+            DestroyMe();
     }
 
     public void DestroyTheObject()

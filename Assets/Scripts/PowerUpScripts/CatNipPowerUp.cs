@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CatNipPowerUp : PowerUpEffectApplication {
-
-	public bool invulnerability;
-
 	//Power Up Behaviour
 	//One spawns around the map in a random location
 	//Slightly longer respawn timer
@@ -13,12 +10,12 @@ public class CatNipPowerUp : PowerUpEffectApplication {
 	//Checks the player who picked it up
 	//Disables the player's ability to take damage
 
-	// Use this for initialization
-
-	public override void ApplyPowerUpEffect (int playerID) 
-	{
-		//Invulnerable
-		GameObject.FindGameObjectWithTag ("PowerUp Manager").GetComponent<PurrUpMewnager> ().PowerUpPickedUp (powerUpID);
-		Destroy (this.gameObject);
-	}
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<CatInfo>() != null && PhotonNetwork.player.IsLocal && !other.gameObject.GetComponent<CatInfo>().IsInvunrable)
+        {
+            other.GetComponent<CatInfo>().GotNip();
+            DestroyMe();
+        }
+    }
 }

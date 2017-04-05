@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-sceneSetups: []
-=======
 sceneSetups:
-- path: Assets/Rick's Corner/Neighborhood.unity
+- path: Assets/Scenes/MainMenu.unity
   isLoaded: 1
   isActive: 1
->>>>>>> f9b95ca4511f8fd7ac3a13c4ca289a7df58a2909

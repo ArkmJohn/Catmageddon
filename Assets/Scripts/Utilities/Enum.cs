@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum FireMode
 {
+    None,
     SemiAutomatic,
     Automatic,
     Beam

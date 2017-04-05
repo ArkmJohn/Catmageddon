@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Steering : MouseBehaviour
 {
+    [Tooltip("Range of this AI when attacking")]
+    public float AIRange = 0.2f;
 
     public GameObject AI, DefendingObject;
     public GameObject target; //has been changed to dynamic
@@ -38,7 +40,7 @@ public class Steering : MouseBehaviour
         seek = new Vector3();
         //targetRB = target.GetComponent<Rigidbody>();
 
-        targetmaxspeed = 10; // NEEDS TO BE REPLACED WITH THE ACTUAL MAX VELOCITY!!!
+        targetmaxspeed = Maxspeed; // NEEDS TO BE REPLACED WITH THE ACTUAL MAX VELOCITY!!!
         frames = new int();  // this will be the number of frames which is needed to predict HOW much of future
         avoidanceDirection = new Vector3();
         avoidanceDirection2 = new Vector3();
@@ -47,6 +49,20 @@ public class Steering : MouseBehaviour
 
     void FixedUpdate()
     {
+        if (!PhotonNetwork.isMasterClient && PhotonNetwork.connected)
+        {
+            return;
+        }
+        if (target != null)
+        {
+            float tempDist = DistanceToTarget(target);
+            if (tempDist <= AIRange)
+            {
+                // Attack here
+                Debug.Log("Attacking");
+                return;
+            }
+        }
         if (!Isfindingnextgoal)
         {
             StartCoroutine(FindNextGoalV());
