@@ -14,7 +14,7 @@ public class CheesePowerUp : PowerUpEffectApplication {
         if (other.gameObject.GetComponent<CatInfo>() != null && PhotonNetwork.player.IsLocal)
         {
             // Call PowerUpManager
-            NetworkPurrUpMewnager.Instantiate.Spa
+            //NetworkPurrUpMewnager.Instantiate.Spa
             DestroyMe();
         }
     }
