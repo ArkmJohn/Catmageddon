@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuManager : MonoBehaviour {
+public class MainMenuManager : MonoBehaviour
+{
 
     public List<Item> items = new List<Item>();
     public List<Item> tanks = new List<TankObject>().ConvertAll(x => (Item)x);
@@ -16,8 +17,11 @@ public class MainMenuManager : MonoBehaviour {
     public List<Text> levelText = new List<Text>();
     public List<Text> xpText = new List<Text>();
 
-    public GameObject catHolder, tankHolder, hatHolder;
+    public GameObject catHolder, tankHolder, hatHolder, myCamera;
+    public List<GameObject> cameraPos;
+    public MenuState myState;
 
+    public float camSpeed, camRotateSpeed;
     //public GameObject 
 
     // Use this for initialization
@@ -26,8 +30,9 @@ public class MainMenuManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
-
+    void Update()
+    {
+        ControlCamera();
     }
 
     public void Setup()
@@ -126,8 +131,88 @@ public class MainMenuManager : MonoBehaviour {
         NetworkManager.Instance.ConnectToRoom(RoomType);
     }
 
+    public void PushButton()
+    {
+        AudioManager.instance.PlayRandomCatSound();
+    }
+
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void ChangeState(int state)
+    {
+        myState = (MenuState)state;
+    }
+
+    public void ControlCamera()
+    {
+        switch (myState)
+        {
+            case MenuState.MAIN:
+                if (myCamera.transform.position != cameraPos[0].transform.position)
+                {
+                    Debug.Log("Moving Camera");
+
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[0].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[0].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                myCamera.transform.Rotate(new Vector3(0, camRotateSpeed * Time.deltaTime, 0));
+                break;
+
+            case MenuState.GLASS:
+                if (myCamera.transform.position != cameraPos[1].transform.position || myCamera.transform.rotation != cameraPos[1].transform.rotation)
+                {
+                    Debug.Log("Moving Camera");
+
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[1].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[1].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                break;
+
+            case MenuState.LAZER:
+                if (myCamera.transform.position != cameraPos[2].transform.position || myCamera.transform.rotation != cameraPos[2].transform.rotation)
+                {
+                    Debug.Log("Moving Camera");
+
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[2].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[2].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                break;
+
+            case MenuState.TANK:
+                if (myCamera.transform.position != cameraPos[3].transform.position || myCamera.transform.rotation != cameraPos[3].transform.rotation)
+                {
+                    Debug.Log("Moving Camera");
+
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[3].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[3].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                break;
+
+
+            case MenuState.PLAY:
+                if (myCamera.transform.position != cameraPos[4].transform.position || myCamera.transform.rotation != cameraPos[4].transform.rotation)
+                {
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[4].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[4].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                break;
+
+
+            default:
+
+                break;
+        }
+    }
+
+    public enum MenuState
+    {
+        MAIN,
+        GLASS,
+        LAZER,
+        TANK,
+        PLAY
     }
 }

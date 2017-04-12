@@ -75,7 +75,7 @@ public class MouseBehaviour : CharInfo
         foreach (CharInfo E in CharacterList)
         {
             float dist = Vector3.Distance(this.transform.position, E.transform.position);
-            Debug.Log(dist);
+            //Debug.Log(dist);
             if (dist <= tempDist)
             {
                 Debug.Log("Setting Up");

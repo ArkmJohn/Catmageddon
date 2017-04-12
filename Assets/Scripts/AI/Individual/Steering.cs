@@ -5,9 +5,14 @@ using UnityEngine;
 public class Steering : MouseBehaviour
 {
     [Tooltip("Range of this AI when attacking")]
-    public float AIRange = 0.2f;
+    public float attackRange = 0.2f;
+    public bool isAttacking;
+    [Tooltip("Attack Collider to be used")]
+    public GameObject attackCollider;
 
-    public GameObject AI, DefendingObject;
+    public Animator myAnimator;
+
+    public GameObject AI;
     public GameObject target; //has been changed to dynamic
     public Vector3 seek;
     public Rigidbody RB, targetRB; //has been changed to dynamic rigidbody
@@ -29,7 +34,10 @@ public class Steering : MouseBehaviour
     void Start()
     {
         //ZeroVel = new Vector3(0, 0, 0);
-
+        if (myAnimator == null)
+        {
+            myAnimator = GetComponent<Animator>();
+        }
         coof = 1f;
         distance = new float();
         AI = this.gameObject;
@@ -46,19 +54,28 @@ public class Steering : MouseBehaviour
         avoidanceDirection2 = new Vector3();
     }
 
+    void Update()
+    {
+        if (this.isAttacking != this.attackCollider.GetActive())
+        {
+            this.attackCollider.SetActive(this.isAttacking);
+        }
+    }
 
     void FixedUpdate()
     {
-        if (!PhotonNetwork.isMasterClient && PhotonNetwork.connected)
+        if (!photonView.isMine)
         {
             return;
         }
         if (target != null)
         {
             float tempDist = DistanceToTarget(target);
-            if (tempDist <= AIRange)
+            if (tempDist < attackRange)
             {
                 // Attack here
+                myAnimator.SetTrigger("Attack");
+                
                 Debug.Log("Attacking");
                 return;
             }
@@ -67,9 +84,23 @@ public class Steering : MouseBehaviour
         {
             StartCoroutine(FindNextGoalV());
         }
-        
+
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        // We dont do anything if we're not the local player
+        if (!photonView.isMine)
+        {
+            return;
+        }
+        if (other.gameObject.tag != "Weapon")
+        {
+            return;
+        }
+
+        this.Health -= other.GetComponent<WeaponCollider>().Damage * Time.deltaTime;
+    }
 
     void Seek()
     {
@@ -80,7 +111,7 @@ public class Steering : MouseBehaviour
         //seek = Vector3.ClampMagnitude(seek, Maxforce);
         RB.AddForce(seek);
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed);
-     
+
     }
 
     Rigidbody TargetRB(GameObject obj)
@@ -168,7 +199,7 @@ public class Steering : MouseBehaviour
         coof = distance / 15f - 0.05f;
         coof = Mathf.Clamp(coof, 0, 1f);
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed * coof);
- 
+
 
     }
 
@@ -182,7 +213,7 @@ public class Steering : MouseBehaviour
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed);
         transform.LookAt(target.transform.position);
     }
-
+    
     // -------------------------------------------------------------Sasan's Section Below -----------------------------------------------------------------------------------------------
     // The Obstacle avoidance is Sasan Faizollah's Work mostly , I have only collaborated and assisted with this part and do not claim ownership of the following code.
 
@@ -210,7 +241,7 @@ public class Steering : MouseBehaviour
 
         if (Physics.Raycast(myRay, out hit, 20f * raycoof))
         {
-            if (hit.collider.tag == "Environment")
+            if (hit.collider.tag == "Untagged")
             {
                 Debug.Log(hit.collider.name + " is ahead");
                 if (Physics.Raycast(transform.position, angledVec, out hit2, 25f * raycoof))
@@ -254,7 +285,7 @@ public class Steering : MouseBehaviour
 
             if (Physics.Raycast(transform.position, transform.right, out hit4, 2 * raycoof))
             {
-                if (hit4.collider.tag == "Environment")
+                if (hit4.collider.tag == "Untagged")
                 {
                     RB.AddForce(leftVec.normalized * 20f);
                     Debug.Log("move left");
@@ -262,7 +293,7 @@ public class Steering : MouseBehaviour
             }
             if (Physics.Raycast(transform.position, leftVec, out hit5, 2 * raycoof))
             {
-                if (hit5.collider.tag == "Environment")
+                if (hit5.collider.tag == "Untagged")
                 {
                     RB.AddForce(transform.right * 20f);
                     Debug.Log("move right");
@@ -274,10 +305,25 @@ public class Steering : MouseBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.DrawLine(transform.position, transform.position + transform.forward.normalized * 20f * raycoof);
         Gizmos.DrawLine(transform.position, transform.position + transform.right * 2 * raycoof);
         Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis(-90f, Vector3.up) * transform.forward) * 2 * raycoof));
         Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis((10 * Multiplier), Vector3.up) * transform.forward) * 25f * raycoof));
         Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis((-10 * negMultiplier), Vector3.up) * transform.forward) * 25f * raycoof));
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(this.Health);
+            stream.SendNext(this.isAttacking);
+        }
+        else
+        {
+            this.Health = (int)stream.ReceiveNext();
+            this.isAttacking = (bool)stream.ReceiveNext();
+        }
     }
 }

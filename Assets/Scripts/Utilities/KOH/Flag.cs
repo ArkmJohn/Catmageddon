@@ -11,17 +11,9 @@ public class Flag : Photon.PunBehaviour
 
     bool IsRedCapturing;
     bool IsBlueCapturing;
-   public bool IsBeingCaptured = false;
+    public bool IsBeingCaptured = false;
 
-    Renderer MyRenderer;
-
-    void Start()
-    {
-        if (MyRenderer == null)
-        {
-            MyRenderer = GetComponent<Renderer>();
-        }
-    }
+    public Renderer MyRenderer;
 
     // Update is called once per frame
     void Update()

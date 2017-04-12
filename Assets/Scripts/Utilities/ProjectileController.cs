@@ -25,9 +25,9 @@ public class ProjectileController : WeaponCollider {
     }
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.GetComponent<CatInfo>())
+        if (col.gameObject.GetComponent<CharInfo>())
         {
-            col.gameObject.GetComponent<PhotonView>().photonView.RPC("TakeDamage", PhotonTargets.All, Damage);
+            col.gameObject.GetComponent<PhotonView>().photonView.RPC("TakeDamage", PhotonTargets.All, Damage, team);
             DestroyTheObject();
         }
         else

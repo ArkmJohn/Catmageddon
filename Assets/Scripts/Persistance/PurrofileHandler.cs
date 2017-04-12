@@ -8,6 +8,8 @@ public class PurrofileHandler : MonoBehaviour {
 
     private static PurrofileHandler instance = new PurrofileHandler();
 
+    public AudioClip LoadMenuSound;
+
     [SerializeField]
     private int ID;
     [SerializeField]
@@ -195,6 +197,7 @@ public class PurrofileHandler : MonoBehaviour {
     public void GoToMainMenu()
     {
         SendWarning("Loading Main");
+        AudioManager.instance.PlayWithRandomVol(LoadMenuSound);
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -438,6 +441,11 @@ public class PurrofileHandler : MonoBehaviour {
             case "experience":
                 // Update Locally
                 CurrentPurrofile.Instance.xp += int.Parse(value);
+                if (CurrentPurrofile.Instance.xp >= 100)
+                {
+                    CurrentPurrofile.Instance.xp -= 100;
+                    StartCoroutine(ChangeValues(ID, "level", "1"));
+                }
                 // Update In the server
                 WWWForm xpEditForm = new WWWForm();
                 xpEditForm.AddField("cat_id", ID);

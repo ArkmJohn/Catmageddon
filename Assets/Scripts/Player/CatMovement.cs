@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(CatInfo))]
 public class CatMovement : MonoBehaviour {
@@ -32,8 +33,9 @@ public class CatMovement : MonoBehaviour {
     // Moves the Player
     void Move()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+
+        float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");//Input.GetAxis("Horizontal");
+        float vertical = CrossPlatformInputManager.GetAxis("Vertical");//Input.GetAxis("Vertical");
 
         Vector3 move = transform.forward * vertical * speed * Time.deltaTime;
         rb.MovePosition(rb.position + move);

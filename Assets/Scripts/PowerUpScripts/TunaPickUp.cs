@@ -17,7 +17,7 @@ public class TunaPickUp : PowerUpEffectApplication {
     {
         if (other.gameObject.GetComponent<CatInfo>() != null && PhotonNetwork.player.IsLocal)
         {
-            other.GetComponent<CatInfo>().TakeDamage(-heal);
+            other.GetComponent<CatInfo>().TakeDamage(-heal, PunTeams.Team.none);
             DestroyMe();
         }
     }
