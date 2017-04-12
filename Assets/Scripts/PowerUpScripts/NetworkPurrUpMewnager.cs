@@ -5,14 +5,16 @@ using UnityEngine;
 public class NetworkPurrUpMewnager : Photon.MonoBehaviour, IPunObservable
 {
     public NetworkPurrUpMewnager Instance;
-    public GameObject RatGroupAI;
+    public bool isSpawningAI = false;
+    public GameObject RatGroupAI, CheesePrefab;
     public List<GameObject> SpawnLocations;
+    public List<GameObject> CheeseSpawnLocations;
     public List<GameObject> PowerUpsPrefab;
     public List<GameObject> RedAISpawnLocation;
     public List<GameObject> BlueAISpawnLocation;
 
     public bool Spawning = false;
-
+    public bool SpawningCheese = false;
     void Awake()
     {
         Instance = this;
@@ -35,8 +37,11 @@ public class NetworkPurrUpMewnager : Photon.MonoBehaviour, IPunObservable
         {
             StartCoroutine(SpawnUp());
         }
-		
-	}
+        if (this.SpawningCheese == false && isSpawningAI)
+        {
+            StartCoroutine(SpawnCheese());
+        }
+    }
 
     public IEnumerator SpawnUp()
     {
@@ -56,7 +61,25 @@ public class NetworkPurrUpMewnager : Photon.MonoBehaviour, IPunObservable
         }
         this.Spawning = false;
     }
+    public IEnumerator SpawnCheese()
+    {
+        this.SpawningCheese = true;
+        Debug.Log("Starting Spawn");
+        yield return new WaitForSeconds(10);
+        Debug.Log("Spawning now " + SpawnLocations.Count);
 
+        for (int i = 0; i < CheeseSpawnLocations.Count; i++)
+        {
+            if (CheeseSpawnLocations[i].GetComponent<PowerUpSpawnLocation>().MySpawnedPowerUp == null)
+            {
+                Debug.Log("Spawning");
+                int random = Random.Range(0, PowerUpsPrefab.Count);
+
+                photonView.RPC("SpawnMyCheese", PhotonTargets.All, i);
+            }
+        }
+        this.SpawningCheese = false;
+    }
     // Spawns a powerup Based on a spawn Index
     [PunRPC]
     public void SpawnPowerUp(int spawnIndex, int powerUpIndex)
@@ -69,23 +92,41 @@ public class NetworkPurrUpMewnager : Photon.MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
+    public void SpawnMyCheese(int spawnIndex)
+    {
+        if (!PhotonNetwork.isMasterClient)
+            return;
+
+        GameObject cheeseUp = PhotonNetwork.Instantiate(CheesePrefab.name, CheeseSpawnLocations[spawnIndex].transform.position, Quaternion.identity, 0);
+        CheeseSpawnLocations[spawnIndex].GetComponent<PowerUpSpawnLocation>().SpawnAPowerUp(cheeseUp);
+    }
+
+    public void SpawnAI(string Group)
+    {
+        photonView.RPC("SpawnAGroup", PhotonTargets.All, Group);
+    }
+
+    [PunRPC]
     public void SpawnAGroup(string Group)
     {
+        if (!PhotonNetwork.isMasterClient)
+            return;
+
         switch (Group)
         {
             case "Red":
-                for (int i = 0; i <= RedAISpawnLocation.Count; i++)
+                for (int i = 0; i < RedAISpawnLocation.Count; i++)
                 {
                     GameObject RedRat = PhotonNetwork.Instantiate(RatGroupAI.name, RedAISpawnLocation[i].transform.position, RedAISpawnLocation[i].transform.rotation, 0);
-                    RedRat.GetComponent<Steering>().MyTeam = PunTeams.Team.red;
+                    RedRat.GetComponent<CharInfo>().MyTeam = PunTeams.Team.red;
                 }
                 break;
 
             case "Blue":
-                for (int i = 0; i <= BlueAISpawnLocation.Count; i++)
+                for (int i = 0; i < BlueAISpawnLocation.Count; i++)
                 {
                     GameObject BlueRat = PhotonNetwork.Instantiate(RatGroupAI.name, BlueAISpawnLocation[i].transform.position, BlueAISpawnLocation[i].transform.rotation, 0);
-                    BlueRat.GetComponent<Steering>().MyTeam = PunTeams.Team.blue;
+                    BlueRat.GetComponent<CharInfo>().MyTeam = PunTeams.Team.blue;
                 }
                 break;
 

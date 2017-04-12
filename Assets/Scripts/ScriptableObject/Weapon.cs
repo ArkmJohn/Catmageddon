@@ -13,6 +13,7 @@ public abstract class Weapon : ScriptableObject {
     [Tooltip("Damage to be given by the Character class")]
     public float damage;
     public float ProjectileSpeed = 500f;
+    public AudioClip attackSound;
     public ParticleSystem fireParticle;
 
     public abstract void ArmWeapon(GameObject spawnPoint, GameObject myTank, PunTeams.Team myTeam);

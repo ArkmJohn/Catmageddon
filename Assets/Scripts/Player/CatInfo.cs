@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class CatInfo : CharInfo, IPunObservable
 {
@@ -29,8 +30,7 @@ public class CatInfo : CharInfo, IPunObservable
     public float MilkSpeedAdd = 10;
     [Tooltip("The Duration of Invunrability")]
     public float CatnipLength = 3;
-    [Tooltip("The Bool to check if the player is Invunrable")]
-    public bool IsInvunrable = false;
+
 
     #endregion
 
@@ -132,7 +132,7 @@ public class CatInfo : CharInfo, IPunObservable
             if (!IsDead())
             {
                 float temp = this.Health / this.maxHealth;
-                Debug.Log(temp);
+                //Debug.Log(temp);
                 HealthContent.fillAmount = temp;
                 HealthContent.color = Color.Lerp(Color.red, Color.green, Mathf.PingPong(temp, 1));
             }
@@ -149,6 +149,10 @@ public class CatInfo : CharInfo, IPunObservable
 
             if (this.MyFireMode == FireMode.Beam && this.IsFiringMain != this.Beam.GetActive()) // Calls the Main Weapons
             {
+                if (this.IsFiringMain == true)
+                {
+                    AudioManager.instance.PlayRandomVolWithSrc(MyTankObject.MainWeapon.attackSound, this.GetComponent<AudioSource>());
+                }
                 this.Beam.SetActive(this.IsFiringMain);
             }
             if (this.MyFireMode != FireMode.Beam && this.MainWeaponPrefab != null && this.IsFiringMain) // Calls the main weapon if not beam
@@ -301,22 +305,7 @@ public class CatInfo : CharInfo, IPunObservable
 
     #region Public Methods
 
-    [PunRPC]
-    public void TakeDamage(float DamageValue)
-    {
-        if (IsInvunrable)
-            return;
 
-        this.Health -= DamageValue;
-    }
-
-    public bool IsDead()
-    {
-        if (this.Health <= 0)
-            return true;
-        else
-            return false;
-    }
 
     public void GotNip()
     {
@@ -438,14 +427,14 @@ public class CatInfo : CharInfo, IPunObservable
 
     void ProcessInput()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (CrossPlatformInputManager.GetButtonDown("Fire1"))//Input.GetButtonDown("Fire1"))
         {
             if (!this.IsFiringSide)
             {
                 this.IsFiringSide = true;
             }
         }
-        if (Input.GetButtonUp("Fire1"))
+        if (CrossPlatformInputManager.GetButtonUp("Fire1"))
         {
             if (this.IsFiringSide)
             {
@@ -453,14 +442,14 @@ public class CatInfo : CharInfo, IPunObservable
             }
         }
 
-        if (Input.GetButtonDown("Fire2"))
+        if (CrossPlatformInputManager.GetButtonDown("Fire2"))
         {
             if (!this.IsFiringMain)
             {
                 this.IsFiringMain = true;
             }
         }
-        if (Input.GetButtonUp("Fire2"))
+        if (CrossPlatformInputManager.GetButtonUp("Fire2"))
         {
             if (this.IsFiringMain)
             {
@@ -478,7 +467,7 @@ public class CatInfo : CharInfo, IPunObservable
         //GameObject bulletClone = PhotonNetwork.Instantiate(SideWeaponPrefab.name, ProjectileSpawnPoint.transform.position, Quaternion.identity, 0);
         GameObject bulletClone = Instantiate(SideWeaponPrefab, ProjectileSpawnPoint.transform.position, ProjectileSpawnPoint.transform.rotation);
         Vector3 direction = ProjectileSpawnPoint.transform.forward;
-
+        AudioManager.instance.PlayRandomVolWithSrc(MyTankObject.SideWeapon.attackSound, this.GetComponent<AudioSource>());
         bulletClone.GetComponent<WeaponCollider>().team = this.MyTeam;
         bulletClone.GetComponent<WeaponCollider>().Damage = this.MyTankObject.SideWeapon.damage;
 
@@ -495,7 +484,7 @@ public class CatInfo : CharInfo, IPunObservable
         //GameObject bulletClone = PhotonNetwork.Instantiate(MainWeaponPrefab.name, ProjectileSpawnPoint.transform.position, Quaternion.identity, 0);
         GameObject bulletClone = Instantiate(MainWeaponPrefab, ProjectileSpawnPoint.transform.position, ProjectileSpawnPoint.transform.rotation);
         Vector3 direction = ProjectileSpawnPoint.transform.forward;
-
+        AudioManager.instance.PlayRandomVolWithSrc(MyTankObject.MainWeapon.attackSound, this.GetComponent<AudioSource>());
         bulletClone.GetComponent<WeaponCollider>().team = this.MyTeam;
         bulletClone.GetComponent<WeaponCollider>().Damage = this.MyTankObject.MainWeapon.damage;
 

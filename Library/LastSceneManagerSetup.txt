@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Scenes/MainMenu.unity
+=======
+- path: Assets/Scenes/LoginScene.unity
+>>>>>>> 535eaa762cfe7f12113ee80c911a56fc97f396a7
   isLoaded: 1
   isActive: 1

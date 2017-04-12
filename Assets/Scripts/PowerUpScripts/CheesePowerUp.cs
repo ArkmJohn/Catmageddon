@@ -14,7 +14,12 @@ public class CheesePowerUp : PowerUpEffectApplication {
         if (other.gameObject.GetComponent<CatInfo>() != null && PhotonNetwork.player.IsLocal)
         {
             // Call PowerUpManager
-            //NetworkPurrUpMewnager.Instantiate.Spa
+            if(other.gameObject.GetComponent<CatInfo>().MyTeam == PunTeams.Team.blue)
+                FindObjectOfType<NetworkPurrUpMewnager>().SpawnAI("Blue");
+
+            if (other.gameObject.GetComponent<CatInfo>().MyTeam == PunTeams.Team.red)
+                FindObjectOfType<NetworkPurrUpMewnager>().SpawnAI("Red");
+
             DestroyMe();
         }
     }

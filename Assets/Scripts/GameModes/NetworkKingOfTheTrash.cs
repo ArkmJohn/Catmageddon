@@ -72,11 +72,11 @@ public class NetworkKingOfTheTrash : GameManager {
     {
         if (player.GetTeam() == PunTeams.Team.red)
         {
-            PhotonNetwork.playerList[1].AddScore(1);
+            PhotonNetwork.player.AddScore(1);
         }
         else
         {
-            PhotonNetwork.playerList[0].AddScore(1);
+            PhotonNetwork.player.AddScore(1);
         }
 
         photonView.RPC("UpdateScore", PhotonTargets.All);
