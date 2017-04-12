@@ -84,6 +84,8 @@ public class AudioManager : MonoBehaviour
     public void ShuffleSong()
     {
         int randomSongID = Random.Range(0, backgroundMusic.Count);
+        backgroundAudioSource.Stop();
+        Debug.Log(randomSongID);
         backgroundAudioSource.PlayOneShot(backgroundMusic[randomSongID]);
     }
 

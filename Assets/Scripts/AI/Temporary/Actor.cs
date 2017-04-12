@@ -38,6 +38,8 @@ public class Actor : CharInfo, IPunObservable
     {
         //if (photonView.isMine)
         //{
+        if (PhotonNetwork.player.IsLocal && this.GetComponent<CharInfo>().Health > 0 && GameManager.CurrentGameState == GameState.ONGOING)
+        {
             if (!isFindingTarget)
             {
                 StartCoroutine(FindTarget());
@@ -47,6 +49,7 @@ public class Actor : CharInfo, IPunObservable
                 ChaseTarget();
             }
             this.myRB.velocity = steering;
+        }
         //}
         //else
         //{

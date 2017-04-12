@@ -21,7 +21,7 @@ public class Steering : MouseBehaviour
     public float distance, avoidanceForce; //change distance to calculate distance between 'this' and dynamic target
     private float coof, raycoof;
     public float Force;
-    private bool MOV;
+    public bool MOV;
     public Vector3 predictedpos;
     public float frames;
     public float targetmaxspeed; // change to dynamic target's maxspeed
@@ -199,7 +199,6 @@ public class Steering : MouseBehaviour
         coof = distance / 15f - 0.05f;
         coof = Mathf.Clamp(coof, 0, 1f);
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed * coof);
-
 
     }
 

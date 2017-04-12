@@ -303,6 +303,7 @@
     <Compile Include="Assets\Scripts\Utilities\WeaponCollider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Audio\Cat Sounds\Read.txt" />
     <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
     <None Include="Assets\Photon Unity Networking\Demos\DemoPickup\Assets\3dFont\3dText.shader" />
     <None Include="Assets\Photon Unity Networking\Demos\DemoRockPaperScissors\Assets\OpenSans\Apache License.txt" />
