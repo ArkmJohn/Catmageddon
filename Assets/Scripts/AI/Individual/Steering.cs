@@ -16,7 +16,7 @@ public class Steering : MouseBehaviour
     public float distance, avoidanceForce; //change distance to calculate distance between 'this' and dynamic target
     private float coof, raycoof;
     public float Force;
-    private bool MOV;
+    public bool MOV;
     public Vector3 predictedpos;
     public float frames;
     public float targetmaxspeed; // change to dynamic target's maxspeed
@@ -30,7 +30,7 @@ public class Steering : MouseBehaviour
     {
         //ZeroVel = new Vector3(0, 0, 0);
 
-        coof = 1f;
+        coof = new float();
         distance = new float();
         AI = this.gameObject;
         //target = CurrentTarget;
@@ -39,7 +39,7 @@ public class Steering : MouseBehaviour
         //Desiredvelocity = new Vector3();
         seek = new Vector3();
         //targetRB = target.GetComponent<Rigidbody>();
-
+        Maxspeed = 20;
         targetmaxspeed = Maxspeed; // NEEDS TO BE REPLACED WITH THE ACTUAL MAX VELOCITY!!!
         frames = new int();  // this will be the number of frames which is needed to predict HOW much of future
         avoidanceDirection = new Vector3();
@@ -65,7 +65,8 @@ public class Steering : MouseBehaviour
         }
         if (!Isfindingnextgoal)
         {
-            StartCoroutine(FindNextGoalV());
+            // StartCoroutine(FindNextGoalV());
+            FindNextGoal();
         }
         
     }
@@ -93,7 +94,7 @@ public class Steering : MouseBehaviour
         distance = Vector3.Distance(AI.transform.position, target.transform.position);
 
 
-        if (distance <= 1000)
+        if (distance <= 25)
         {
             MOV = true;
         }
@@ -156,13 +157,14 @@ public class Steering : MouseBehaviour
     public IEnumerator FindNextGoalV()
     {
         Isfindingnextgoal = true;
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(0.1f);
         FindNextGoal();
     }
 
     void Arrive()
     {
         Vector3 desiredvelocity = target.transform.position - AI.transform.position;
+        desiredvelocity = desiredvelocity * 2;
         RB.AddForce(desiredvelocity - RB.velocity);
         seek = desiredvelocity - RB.velocity;
         coof = distance / 15f - 0.05f;
