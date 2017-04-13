@@ -93,7 +93,7 @@ public class AudioManager : MonoBehaviour
     {
         if (backgroundAudioSource.volume != 1)
         {
-            backgroundAudioSource.volume = Mathf.Lerp(backgroundAudioSource.volume, 1, Time.deltaTime * 0.01f);
+            backgroundAudioSource.volume = Mathf.Lerp(backgroundAudioSource.volume, 1, Time.deltaTime * 0.3f);
         }
     }
 

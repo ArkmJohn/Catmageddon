@@ -10,6 +10,8 @@ public class CurrentPurrofile : MonoBehaviour {
     public string invStringHolder;
     public List<int> equipped;
     public int equippedTank;
+    public int equippedCat;
+    public int equippedHat;
     public string eqStringHolder;
     public string username;
     public int cash;
@@ -80,5 +82,8 @@ public class CurrentPurrofile : MonoBehaviour {
     {
         equippedTank = a;
     }
-
+    public void EquipHat(int a)
+    {
+        equippedHat = a;
+    }
 }

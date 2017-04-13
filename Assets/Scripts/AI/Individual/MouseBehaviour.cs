@@ -30,25 +30,6 @@ public class MouseBehaviour : CharInfo
     bool IsChecking = false; //this bool is a check for the TotalCharacterCheck function , used as a condition to run the function
     bool IsAttacking = false; //this bool is a check for the Attacking coroutine , it is used as a condition to run the function
     bool IsAdding = false; //this bool is a check for the ChartoEnemy function , it is used as a condition to run the function
-                           // Update is called once per frame
-                           /* void Update()
-                            {
-                                if (!IsChecking) //running the coroutine to keep updating the total number of characters in the game scene
-                                {
-                                    StartCoroutine(TotalCharacterCheck());
-                                }
-                                if (!IsAdding) //running the coroutine to keep updating the enemies of the gameobject
-                                {
-                                    StartCoroutine(ChartoEnemy());
-
-                                }
-                                if (!IsAttacking && Attacking()) //checking if the state of the AI is attacking , if true then starting the attackcheck coroutine
-                                {
-                                    StartCoroutine(AttackCheck());
-                                }
-
-                            } */
-
 
     protected List<CharInfo> GetEnemies()
     {

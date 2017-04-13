@@ -15,7 +15,7 @@ public class GameManager : Photon.MonoBehaviour, IPunObservable
 {
 
     static public GameManager Instance;
-    public GameObject PlayerPrefab;
+    public GameObject PlayerPrefab, localPlayer;
     public List<GameObject> SpawnPoints;
 
     public List<TankObject> TankPrefabs;
@@ -60,7 +60,8 @@ public class GameManager : Photon.MonoBehaviour, IPunObservable
         if (PhotonNetwork.player.IsLocal)
         {
             GameObject player = PhotonNetwork.Instantiate(this.PlayerPrefab.name, SpawnPoints[PhotonNetwork.player.ID - 1].transform.position, Quaternion.identity, 0); // Spawns the player character based on the Player ID and an array as the reference for the vector
-
+            this.localPlayer = player;
+            
             // Sets the Local Player to a Team based on his playerID
             if (PhotonNetwork.player.ID % 2 == 0)
             {
@@ -155,7 +156,21 @@ public class GameManager : Photon.MonoBehaviour, IPunObservable
     {
         NetworkManager.Instance.LeaveTheRoom(GameResult);
     }
-    
+
+    public void Mute()
+    {
+        AudioManager.instance.Mute();
+    }
+
+    public void FireMain()
+    {
+        localPlayer.GetComponent<CatInfo>().UseMainWeapon();
+    }
+    public void FireSide()
+    {
+        localPlayer.GetComponent<CatInfo>().UseSideWeapon();
+    }
+
     #region IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

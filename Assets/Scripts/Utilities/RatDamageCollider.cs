@@ -25,6 +25,10 @@ public class RatDamageCollider : WeaponCollider
     {
         if (col.gameObject.GetComponent<CharInfo>())
         {
+            if (!PhotonNetwork.connected)
+            {
+                col.gameObject.GetComponent<CharInfo>().TakeDamage(Damage, team);
+            }
             col.gameObject.GetComponent<PhotonView>().photonView.RPC("TakeDamage", PhotonTargets.All, Damage, team);
         }
     }

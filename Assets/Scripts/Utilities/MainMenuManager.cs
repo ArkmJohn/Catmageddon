@@ -126,6 +126,31 @@ public class MainMenuManager : MonoBehaviour
 
     }
 
+    public void EquipHat(int hatID)
+    {
+        if (CurrentPurrofile.Instance != null)
+        {
+            CurrentPurrofile.Instance.equippedHat = hatID;
+        }
+        FindObjectOfType<NetworkManager>().defaultHat = hatID;
+
+    }
+
+    public void EquipCat(int catID)
+    {
+        if (CurrentPurrofile.Instance != null)
+        {
+            CurrentPurrofile.Instance.equippedCat = catID;
+        }
+        FindObjectOfType<NetworkManager>().defaultCat = catID;
+
+    }
+
+    public void ChangeExpactions(int playerCount)
+    {
+        NetworkManager.Instance.expectedPlayerCount = playerCount;
+    }
+
     public void ConnectToGame(string RoomType)
     {
         NetworkManager.Instance.ConnectToRoom(RoomType);
@@ -200,11 +225,31 @@ public class MainMenuManager : MonoBehaviour
                 }
                 break;
 
+            case MenuState.HAT:
+                if (myCamera.transform.position != cameraPos[5].transform.position || myCamera.transform.rotation != cameraPos[5].transform.rotation)
+                {
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[5].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[5].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                break;
+
+            case MenuState.CAT:
+                if (myCamera.transform.position != cameraPos[6].transform.position || myCamera.transform.rotation != cameraPos[6].transform.rotation)
+                {
+                    myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, cameraPos[6].transform.position, camSpeed * Time.deltaTime);
+                    myCamera.transform.rotation = Quaternion.RotateTowards(myCamera.transform.rotation, cameraPos[6].transform.rotation, camSpeed * Time.deltaTime);
+                }
+                break;
 
             default:
 
                 break;
         }
+    }
+
+    public void GoToCredits()
+    {
+        Application.LoadLevel("Credits");
     }
 
     public enum MenuState
@@ -213,6 +258,8 @@ public class MainMenuManager : MonoBehaviour
         GLASS,
         LAZER,
         TANK,
-        PLAY
+        PLAY,
+        HAT,
+        CAT
     }
 }

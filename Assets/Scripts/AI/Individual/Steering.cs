@@ -31,6 +31,11 @@ public class Steering : MouseBehaviour
     Vector3 avoidanceDirection, avoidanceDirection2;
     public bool Isfindingnextgoal;
 
+    Vector3 networkAIPos;
+    Quaternion networkAIRot;
+
+    #region Unity.Callbacks
+
     void Start()
     {
         //ZeroVel = new Vector3(0, 0, 0);
@@ -56,6 +61,11 @@ public class Steering : MouseBehaviour
 
     void Update()
     {
+        if (attackCollider.GetComponent<WeaponCollider>().team != this.MyTeam && attackCollider != null)
+        {
+            attackCollider.GetComponent<WeaponCollider>().team = this.MyTeam;
+        }
+
         if (this.isAttacking != this.attackCollider.GetActive())
         {
             this.attackCollider.SetActive(this.isAttacking);
@@ -64,27 +74,55 @@ public class Steering : MouseBehaviour
 
     void FixedUpdate()
     {
-        if (!photonView.isMine)
+        if (!PhotonNetwork.isMasterClient)
         {
-            return;
+            transform.position = Vector3.Lerp(transform.position, this.networkAIPos, Time.deltaTime * 5);
+            transform.rotation = Quaternion.Lerp(transform.rotation, this.networkAIRot, Time.deltaTime * 5);
         }
-        if (target != null)
+        else
         {
-            float tempDist = DistanceToTarget(target);
-            if (tempDist < attackRange)
+            if (this.IsDead())
             {
-                // Attack here
-                myAnimator.SetTrigger("Attack");
-                
-                Debug.Log("Attacking");
-                return;
+                // Destroy this
+                PhotonNetwork.Destroy(this.gameObject);
             }
-        }
-        if (!Isfindingnextgoal)
-        {
-            StartCoroutine(FindNextGoalV());
-        }
+            if (target != null)
+            {
 
+                float tempDist = DistanceToTarget(target);
+                if (tempDist < attackRange)
+                {
+                    // Attack here
+                    myAnimator.SetTrigger("Attack");
+                    isAttacking = true;
+                    Debug.Log("Attacking");
+                    transform.LookAt(target.transform);
+                    return;
+                }
+
+            }
+            if (isAttacking)
+                return;
+
+            if (target != null)
+            {
+                ObstacleAvoidance();
+                transform.LookAt(transform.position + RB.velocity);
+            }
+            if (!Isfindingnextgoal)
+            {
+                StartCoroutine(FindNextGoalV());
+                //FindNextGoal();
+            }
+            this.photonView.RPC("UpdatePosition", PhotonTargets.Others, this.transform.position, this.transform.rotation);
+        }
+    }
+
+    [PunRPC]
+    void UpdatePosition(Vector3 netPos, Quaternion netQ)
+    {
+        this.networkAIPos = netPos;
+        this.networkAIRot = netQ;
     }
 
     void OnTriggerStay(Collider other)
@@ -101,6 +139,19 @@ public class Steering : MouseBehaviour
 
         this.Health -= other.GetComponent<WeaponCollider>().Damage * Time.deltaTime;
     }
+
+    #endregion
+
+    #region Public.Function
+
+    public void FinishAttacking()
+    {
+        this.isAttacking = false;
+    }
+
+    #endregion
+
+    #region Private.Functions
 
     void Seek()
     {
@@ -176,19 +227,11 @@ public class Steering : MouseBehaviour
                 predictedVel();
                 Debug.Log("Seek");
             }
-            ObstacleAvoidance();
-            transform.LookAt(transform.position + RB.velocity);
+
 
             //Debug.Log(MOV?"seek":"arrive");
         }
         Isfindingnextgoal = false;
-    }
-
-    public IEnumerator FindNextGoalV()
-    {
-        Isfindingnextgoal = true;
-        yield return new WaitForSeconds(2.0f);
-        FindNextGoal();
     }
 
     void Arrive()
@@ -212,7 +255,20 @@ public class Steering : MouseBehaviour
         RB.velocity = Vector3.ClampMagnitude(RB.velocity, Maxspeed);
         transform.LookAt(target.transform.position);
     }
-    
+
+    #endregion
+
+    #region IEnumerators
+
+    public IEnumerator FindNextGoalV()
+    {
+        Isfindingnextgoal = true;
+        yield return new WaitForSeconds(0.25f);
+        FindNextGoal();
+    }
+
+    #endregion
+
     // -------------------------------------------------------------Sasan's Section Below -----------------------------------------------------------------------------------------------
     // The Obstacle avoidance is Sasan Faizollah's Work mostly , I have only collaborated and assisted with this part and do not claim ownership of the following code.
 
@@ -240,7 +296,7 @@ public class Steering : MouseBehaviour
 
         if (Physics.Raycast(myRay, out hit, 20f * raycoof))
         {
-            if (hit.collider.tag == "Untagged")
+            if (hit.collider.gameObject != target)//hit.collider.tag == "Untagged")
             {
                 Debug.Log(hit.collider.name + " is ahead");
                 if (Physics.Raycast(transform.position, angledVec, out hit2, 25f * raycoof))
@@ -284,17 +340,17 @@ public class Steering : MouseBehaviour
 
             if (Physics.Raycast(transform.position, transform.right, out hit4, 2 * raycoof))
             {
-                if (hit4.collider.tag == "Untagged")
+                if (hit4.collider.gameObject != target)//"Untagged")
                 {
-                    RB.AddForce(leftVec.normalized * 20f);
+                    RB.AddForce(leftVec.normalized * 10f);
                     Debug.Log("move left");
                 }
             }
             if (Physics.Raycast(transform.position, leftVec, out hit5, 2 * raycoof))
             {
-                if (hit5.collider.tag == "Untagged")
+                if (hit5.collider.gameObject != target)//"Untagged")
                 {
-                    RB.AddForce(transform.right * 20f);
+                    RB.AddForce(transform.right * 10f);
                     Debug.Log("move right");
                 }
             }
@@ -304,12 +360,13 @@ public class Steering : MouseBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.DrawLine(transform.position, transform.position + transform.forward.normalized * 20f * raycoof);
         Gizmos.DrawLine(transform.position, transform.position + transform.right * 2 * raycoof);
         Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis(-90f, Vector3.up) * transform.forward) * 2 * raycoof));
         Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis((10 * Multiplier), Vector3.up) * transform.forward) * 25f * raycoof));
         Gizmos.DrawLine(transform.position, transform.position + ((Quaternion.AngleAxis((-10 * negMultiplier), Vector3.up) * transform.forward) * 25f * raycoof));
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -318,6 +375,7 @@ public class Steering : MouseBehaviour
         {
             stream.SendNext(this.Health);
             stream.SendNext(this.isAttacking);
+
         }
         else
         {

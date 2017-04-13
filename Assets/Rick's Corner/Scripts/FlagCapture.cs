@@ -10,11 +10,13 @@ public class FlagCapture : MonoBehaviour {
     public PunTeams.Team CaptureTeam = PunTeams.Team.none; // SERIALIZE PLS
     public bool IsBeingCaptured = false; // SERIALIZE PLS
     public MeshRenderer flagMat; // Materials of the flag material
+    public string FlagPartSystem;
     public Dictionary<PunTeams.Team, float> PercentageList = new Dictionary<PunTeams.Team, float>();
 
     // Use this for initialization
     void Start () 
 	{
+        
         flagMat.material.color = Color.white;
         captureController = GameObject.Find("CaptureCollider").GetComponent<CaptureController> ();
 	}

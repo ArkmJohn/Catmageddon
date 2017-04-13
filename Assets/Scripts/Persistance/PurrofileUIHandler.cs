@@ -45,7 +45,10 @@ public class PurrofileUIHandler : MonoBehaviour {
             ReloadSignUp();
         }
         else
+        {
             PurrofileHandler.Instance.SignMeUp(signupE, signupUser, signupPass);
+            LoadUp();
+        }
     }
 
     public void LoadUp()

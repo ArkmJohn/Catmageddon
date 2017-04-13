@@ -8,6 +8,7 @@ public class Flag : Photon.PunBehaviour
     public PunTeams.Team FlagOwner = PunTeams.Team.none;
     public float RedCaptureValue = 0;
     public float BlueCaptureValue = 0;
+    public string CaptureParticles;
 
     bool IsRedCapturing;
     bool IsBlueCapturing;
@@ -15,6 +16,8 @@ public class Flag : Photon.PunBehaviour
 
     public Renderer MyRenderer;
 
+
+    
     // Update is called once per frame
     void Update()
     {
@@ -33,11 +36,14 @@ public class Flag : Photon.PunBehaviour
             if (this.IsRedCapturing && !this.IsBlueCapturing)
             {
                 float temp = this.RedCaptureValue / 10;
+               
                 MyRenderer.material.color = Color.Lerp(MyRenderer.material.color, Color.red, Mathf.PingPong(temp, 1));
+
             }
             if (!this.IsRedCapturing && this.IsBlueCapturing)
             {
                 float temp = this.RedCaptureValue / 10;
+                
                 MyRenderer.material.color = Color.Lerp(MyRenderer.material.color, Color.blue, Mathf.PingPong(temp, 1));
             }
         }

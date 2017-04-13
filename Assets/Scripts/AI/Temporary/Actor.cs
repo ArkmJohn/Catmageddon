@@ -38,8 +38,8 @@ public class Actor : CharInfo, IPunObservable
     {
         //if (photonView.isMine)
         //{
-        if (PhotonNetwork.player.IsLocal && this.GetComponent<CharInfo>().Health > 0 && GameManager.CurrentGameState == GameState.ONGOING)
-        {
+        //if (PhotonNetwork.player.IsLocal && this.GetComponent<CharInfo>().Health > 0 && GameManager.CurrentGameState == GameState.ONGOING)
+        //{
             if (!isFindingTarget)
             {
                 StartCoroutine(FindTarget());
@@ -49,7 +49,7 @@ public class Actor : CharInfo, IPunObservable
                 ChaseTarget();
             }
             this.myRB.velocity = steering;
-        }
+        //}
         //}
         //else
         //{
@@ -66,8 +66,8 @@ public class Actor : CharInfo, IPunObservable
         //Debug.Log(distanceToTarget);
         if(this.isAvoiding)
         {
-            steering = AvoidanceForce();
-            steering.Normalize();
+            //steering = AvoidanceForce();
+            //steering.Normalize();
             Debug.Log("Hello?");
             this.isAvoiding = false;
         }
@@ -83,7 +83,7 @@ public class Actor : CharInfo, IPunObservable
             desiredVelocity = Vector3.Normalize(desiredVelocity) * maxSpeed * (distanceToTarget / slowRadius);
             Debug.Log("Slowing Down");
             steering = desiredVelocity - myRB.velocity;
-            steering += AvoidanceForce();
+            //steering += AvoidanceForce();
             steering.Normalize();
 
         }
@@ -91,7 +91,7 @@ public class Actor : CharInfo, IPunObservable
         {
             desiredVelocity = Vector3.Normalize(desiredVelocity) * maxSpeed;
             steering = desiredVelocity - myRB.velocity;
-            steering += AvoidanceForce();
+            //steering += AvoidanceForce();
             steering.Normalize();
 
         }

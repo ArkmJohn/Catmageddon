@@ -54,7 +54,12 @@ public class CatInfo : CharInfo, IPunObservable
     // Bool for Milk
     bool HasMilk = false;
 
-    int myTankID;
+    [SerializeField]
+    int myCatID = 1;
+    [SerializeField]
+    int myHatID = 1;
+    [SerializeField]
+    int myTankID = 1;
     string MyName;
 
     // Tank Object for the current player
@@ -86,18 +91,21 @@ public class CatInfo : CharInfo, IPunObservable
             MyTeam = PhotonNetwork.player.GetTeam();
             // Set Up Tank
             this.myTankID = PhotonNetwork.player.GetTank();
+            this.myHatID = PhotonNetwork.player.GetHat();
+            this.myCatID = PhotonNetwork.player.GetCat();
             this.MyName = PhotonNetwork.player.NickName;
             this.MyTeam = PhotonNetwork.player.GetTeam();
+            //SetupTank(myTankID, myHatID, myCatID);
         }
-        SetupTank(myTankID);
-
+        //SetupTank(myTankID, myHatID, myCatID);
+        this.photonView.RPC("SetupTank", PhotonTargets.All, myTankID, myHatID, myCatID);
 
     }
 
     void Update()
     {
         // Checks if the Current Game State is Over
-        if(GameManager.CurrentGameState == GameState.OVER)
+        if (GameManager.CurrentGameState == GameState.OVER)
         {
             return;
         }
@@ -305,8 +313,6 @@ public class CatInfo : CharInfo, IPunObservable
 
     #region Public Methods
 
-
-
     public void GotNip()
     {
         this.IsInvunrable = true;
@@ -317,22 +323,76 @@ public class CatInfo : CharInfo, IPunObservable
         this.HasMilk = true;
     }
 
+    public void UseMainWeapon()
+    {
+        if (this.MyFireMode == FireMode.Beam) // Calls the Main Weapons
+        {
+
+            AudioManager.instance.PlayRandomVolWithSrc(MyTankObject.MainWeapon.attackSound, this.GetComponent<AudioSource>());
+            this.Beam.SetActive(true);
+        }
+        if (this.MyFireMode != FireMode.Beam && this.MainWeaponPrefab != null) // Calls the main weapon if not beam
+        {
+            if (CDMain <= 0)
+            {
+                //UseMainWeapon("Main");
+                this.photonView.RPC("UseMainWeapon", PhotonTargets.All, "Main");
+                CDMain = maxCDMain;
+            }
+        }
+    }
+
+    public void UseSideWeapon()
+    {
+        // Use or Activate Side weapons
+        if (this.SideWeaponPrefab != null)
+        {
+            if (CDSide <= 0)
+            {
+                //UseSideWeapon("Side");
+                this.photonView.RPC("UseSideWeapon", PhotonTargets.All, "Side");
+                CDSide = maxCDSide;
+            }
+        }
+    }
+
     #endregion
 
     #region Private Methods
 
     public bool hasSetup = false;
 
-    void SetupTank(int TankIndex)
+    [PunRPC]
+    void SetupTank(int tankIndex, int hatID, int catID)
     {
-        TankObject myTank = GameManager.Instance.TankPrefabs[TankIndex];
+        TankObject myTank = GameManager.Instance.TankPrefabs[tankIndex];
         MyTankObject = myTank;
         // Spawns the tank Object
-        GameObject Tank = PhotonNetwork.Instantiate(MyTankObject.TankPrefab.name, this.transform.position, this.transform.rotation, 0);
+        GameObject Tank;
+        //GameObject Tank = PhotonNetwork.Instantiate(MyTankObject.TankPrefab.name, this.transform.position, this.transform.rotation, 0);
+        Tank = Instantiate(Resources.Load(MyTankObject.TankPrefab.name, typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
         Tank.transform.SetParent(this.transform);
         this.TankObject = Tank;
         // Calls the change of color based on the Team
         ChangeColor(Tank.transform.FindChild("Body/Body").gameObject);
+
+        //Set up Cat
+        GameObject Cat;
+        //GameObject Cat = PhotonNetwork.Instantiate("1" + myCatID.ToString(), this.transform.position, this.transform.rotation, 0);
+        Cat = Instantiate(Resources.Load("1" + myCatID.ToString(), typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
+        Cat.transform.SetParent(Tank.transform.FindChild("Turret/CatSpawn"));
+        Cat.transform.localPosition = Vector3.zero;
+        Cat.transform.localRotation = new Quaternion(0, 0, 0, 0);
+        Cat.transform.localScale = Vector3.one;
+
+        // Set up Hat
+        GameObject Hat;
+        //GameObject Hat = PhotonNetwork.Instantiate("0" + myHatID.ToString(), this.transform.position, this.transform.rotation, 0);
+        Hat = Instantiate(Resources.Load("0" + myHatID.ToString(), typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
+        Hat.transform.SetParent(Tank.transform.FindChild("Turret/CatSpawn/HatSpawn"));
+        Hat.transform.localPosition = Vector3.zero;
+        Hat.transform.localRotation = new Quaternion(0, 0, 0, 0);
+        Hat.transform.localScale = Vector3.one;
 
         // Sets the Health
         this.maxHealth = myTank.Health;
@@ -458,6 +518,11 @@ public class CatInfo : CharInfo, IPunObservable
         }
     }
 
+    void FireSide()
+    {
+
+    }
+
     [PunRPC]
     void UseSideWeapon(string message)
     {
@@ -523,6 +588,8 @@ public class CatInfo : CharInfo, IPunObservable
             stream.SendNext(this.CDSide);
             stream.SendNext(this.MyName);
             stream.SendNext(this.myTankID);
+            stream.SendNext(this.myCatID);
+            stream.SendNext(this.myHatID);
         }
         else
         {
@@ -539,6 +606,8 @@ public class CatInfo : CharInfo, IPunObservable
             this.CDSide = (float)stream.ReceiveNext();
             this.MyName = (string)stream.ReceiveNext();
             this.myTankID = (int)stream.ReceiveNext();
+            this.myCatID = (int)stream.ReceiveNext();
+            this.myHatID = (int)stream.ReceiveNext();
         }
     }
 

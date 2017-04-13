@@ -13,6 +13,8 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
     public string GameScene = "TankScenes";
     public string nick;
     public int defaultTank = 1;
+    public int defaultHat = 1;
+    public int defaultCat = 1;
     public int expectedPlayerCount = 2;
     public PhotonLogLevel Loglevel = PhotonLogLevel.Informational;
     public string LastWinResult = "None";
@@ -75,11 +77,15 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         {
             PhotonNetwork.player.NickName = CurrentPurrofile.Instance.username + " ";
             PhotonNetwork.player.SetTank(CurrentPurrofile.Instance.equippedTank);
+            PhotonNetwork.player.SetCat(CurrentPurrofile.Instance.equippedCat);
+            PhotonNetwork.player.SetHat(CurrentPurrofile.Instance.equippedHat);
         }
         else
         {
             PhotonNetwork.player.NickName = "Test";
             PhotonNetwork.player.SetTank(defaultTank);
+            PhotonNetwork.player.SetCat(defaultCat);
+            PhotonNetwork.player.SetHat(defaultHat);
         }
         if (!PhotonNetwork.connected)
         {
@@ -95,11 +101,15 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         if (FindObjectOfType<CurrentPurrofile>())
         {
             PhotonNetwork.player.SetTank(CurrentPurrofile.Instance.equippedTank);
+            PhotonNetwork.player.SetCat(CurrentPurrofile.Instance.equippedCat);
+            PhotonNetwork.player.SetHat(CurrentPurrofile.Instance.equippedHat);
         }
         else
         {
             PhotonNetwork.player.NickName = "Test";
             PhotonNetwork.player.SetTank(defaultTank);
+            PhotonNetwork.player.SetCat(defaultCat);
+            PhotonNetwork.player.SetHat(defaultHat);
         }
         if (PhotonNetwork.connected)
         {
@@ -109,21 +119,21 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
             {
                 case "deathmatch":
                     GameScene = "deathmatch";
-                    expectedPlayerCount = 2;
+                    //expectedPlayerCount = 2;
                     JoinDeathMatch();
                     break;
 
                 case "koh":
                     GameScene = "koh";
                     //expectedPlayerCount = 4;
-                    expectedPlayerCount = 2; // Testing
+                    //expectedPlayerCount = 2; // Testing
                     JoinKOH();
                     break;
 
                 case "ctt":
                     GameScene = "ctt";
                     //expectedPlayerCount = 6;
-                    expectedPlayerCount = 2; // Testing
+                    //expectedPlayerCount = 2; // Testing
                     JoinCTT();
                     break;
 
@@ -180,14 +190,14 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         {
             case "deathmatch":
                 PhotonNetwork.CreateRoom(null, DeathMatchProperties(), null);
-                expectedPlayerCount = 2;
+                //expectedPlayerCount = 2;
                 DebugMe("Joining DeathMatch");
                 break;
 
             case "koh":
                 PhotonNetwork.CreateRoom(null, KOHProperties(), null);
                 //expectedPlayerCount = 4;
-                expectedPlayerCount = 2; // Testing
+                //expectedPlayerCount = 2; // Testing
 
                 DebugMe("Joining KoH");
                 break;
@@ -195,7 +205,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
             case "ctt":
                 PhotonNetwork.CreateRoom(null, CTTProperties(), null);
                 //expectedPlayerCount = 6;
-                expectedPlayerCount = 2; // Testing
+                //expectedPlayerCount = 2; // Testing
 
                 DebugMe("Joining CTT");
                 break;
@@ -225,7 +235,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.CustomRoomPropertiesForLobby = new string[] { "deathmatch", "ai" };
         roomOptions.CustomRoomProperties = new Hashtable() { { "deathmatch", 1} };
-        roomOptions.MaxPlayers = 2;
+        roomOptions.MaxPlayers = (byte)expectedPlayerCount;
 
         return roomOptions;
     }
@@ -236,7 +246,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         roomOptions.CustomRoomPropertiesForLobby = new string[] { "koh", "ai" };
         roomOptions.CustomRoomProperties = new Hashtable() { { "koh", 1 } };
         //roomOptions.MaxPlayers = 4;
-        roomOptions.MaxPlayers = 2;
+        roomOptions.MaxPlayers = (byte)expectedPlayerCount;
 
         return roomOptions;
     }
@@ -247,7 +257,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         roomOptions.CustomRoomPropertiesForLobby = new string[] { "ctt", "ai" };
         roomOptions.CustomRoomProperties = new Hashtable() { { "ctt", 1 } };
         //roomOptions.MaxPlayers = 6;
-        roomOptions.MaxPlayers = 2;
+        roomOptions.MaxPlayers = (byte)expectedPlayerCount;
 
         return roomOptions;
     }
@@ -259,7 +269,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
     {
         Debug.Log("Joing Room");
         Hashtable expectedRoomProperties = new Hashtable() { { "deathmatch", 1 } };
-        PhotonNetwork.JoinRandomRoom(expectedRoomProperties, 2); // Test
+        PhotonNetwork.JoinRandomRoom(expectedRoomProperties, (byte)expectedPlayerCount); // Test
     }
 
     public void JoinKOH()
@@ -267,7 +277,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         Debug.Log("Joing Room");
 
         Hashtable expectedRoomProperties = new Hashtable() { { "koh", 1 } };
-        PhotonNetwork.JoinRandomRoom(expectedRoomProperties, 2); // Test
+        PhotonNetwork.JoinRandomRoom(expectedRoomProperties, (byte)expectedPlayerCount); // Test
     }
 
     public void JoinCTT()
@@ -275,7 +285,7 @@ public class NetworkManager : Photon.PunBehaviour, IPunObservable
         Debug.Log("Joing Room");
 
         Hashtable expectedRoomProperties = new Hashtable() { { "ctt", 1 } };
-        PhotonNetwork.JoinRandomRoom(expectedRoomProperties, 2); // Test
+        PhotonNetwork.JoinRandomRoom(expectedRoomProperties, (byte)expectedPlayerCount); // Test
     }
     #endregion
 

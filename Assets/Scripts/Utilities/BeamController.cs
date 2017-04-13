@@ -23,7 +23,7 @@ public class BeamController : WeaponCollider
     IEnumerator CheckMe()
     {
         isCheckedOwned = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
         bool isOwned = false;
         foreach (CatInfo a in FindObjectsOfType<CatInfo>())
         {

@@ -44,7 +44,7 @@ public class CameraControl : MonoBehaviour
     void InitFollowing()
     {
         Vector3 target = Target.position;
-        cameraT.transform.position = Vector3.Lerp(cameraT.position, target, Time.deltaTime * velocity);
+        cameraT.transform.position = Vector3.Lerp(cameraT.position, target, velocity);
         cameraT.transform.LookAt(localPlayer);
 
     }
