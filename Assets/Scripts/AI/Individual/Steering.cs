@@ -84,7 +84,9 @@ public class Steering : MouseBehaviour
             if (this.IsDead())
             {
                 // Destroy this
-                PhotonNetwork.Destroy(this.gameObject);
+                myAnimator.SetBool("IsAlive", false);
+                myAnimator.SetTrigger("Die");
+
             }
             if (target != null)
             {
@@ -147,6 +149,11 @@ public class Steering : MouseBehaviour
     public void FinishAttacking()
     {
         this.isAttacking = false;
+    }
+
+    public void KillMe()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
     }
 
     #endregion

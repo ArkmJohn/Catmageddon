@@ -95,10 +95,13 @@ public class CatInfo : CharInfo, IPunObservable
             this.myCatID = PhotonNetwork.player.GetCat();
             this.MyName = PhotonNetwork.player.NickName;
             this.MyTeam = PhotonNetwork.player.GetTeam();
+            this.photonView.RPC("SetupTank", PhotonTargets.All, PhotonNetwork.player.GetTank(),
+                PhotonNetwork.player.GetHat(), PhotonNetwork.player.GetCat());
+
             //SetupTank(myTankID, myHatID, myCatID);
         }
         //SetupTank(myTankID, myHatID, myCatID);
-        this.photonView.RPC("SetupTank", PhotonTargets.All, myTankID, myHatID, myCatID);
+        //this.photonView.RPC("SetupTank", PhotonTargets.All, myTankID, myHatID, myCatID);
 
     }
 
@@ -122,6 +125,7 @@ public class CatInfo : CharInfo, IPunObservable
             }
             else
             {
+                this.photonView.RPC("Die", PhotonTargets.All);
                 FindObjectOfType<GameManager>().PlayerDied(PhotonNetwork.player);
                 ResetPlayer();
             }
@@ -323,6 +327,12 @@ public class CatInfo : CharInfo, IPunObservable
         this.HasMilk = true;
     }
 
+    [PunRPC]
+    public void Die()
+    {
+        Instantiate(Resources.Load("Diesplosion"), this.transform.position, this.transform.rotation);
+    }
+
     public void UseMainWeapon()
     {
         if (this.MyFireMode == FireMode.Beam) // Calls the Main Weapons
@@ -379,7 +389,7 @@ public class CatInfo : CharInfo, IPunObservable
         //Set up Cat
         GameObject Cat;
         //GameObject Cat = PhotonNetwork.Instantiate("1" + myCatID.ToString(), this.transform.position, this.transform.rotation, 0);
-        Cat = Instantiate(Resources.Load("1" + myCatID.ToString(), typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
+        Cat = Instantiate(Resources.Load("1" + catID.ToString(), typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
         Cat.transform.SetParent(Tank.transform.FindChild("Turret/CatSpawn"));
         Cat.transform.localPosition = Vector3.zero;
         Cat.transform.localRotation = new Quaternion(0, 0, 0, 0);
@@ -388,7 +398,7 @@ public class CatInfo : CharInfo, IPunObservable
         // Set up Hat
         GameObject Hat;
         //GameObject Hat = PhotonNetwork.Instantiate("0" + myHatID.ToString(), this.transform.position, this.transform.rotation, 0);
-        Hat = Instantiate(Resources.Load("0" + myHatID.ToString(), typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
+        Hat = Instantiate(Resources.Load("0" + hatID.ToString(), typeof(GameObject)), this.transform.position, this.transform.rotation) as GameObject;
         Hat.transform.SetParent(Tank.transform.FindChild("Turret/CatSpawn/HatSpawn"));
         Hat.transform.localPosition = Vector3.zero;
         Hat.transform.localRotation = new Quaternion(0, 0, 0, 0);

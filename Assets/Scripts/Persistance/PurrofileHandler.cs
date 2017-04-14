@@ -456,6 +456,17 @@ public class PurrofileHandler : MonoBehaviour {
                 yield return xpEdit;
                 Debug.Log("Changed the XP by adding " + xpEdit.text);
                 break;
+
+            //case "hats":
+            //    WWWForm hatsForm = new WWWForm();
+            //    hatsForm.AddField("cat_id", ID);
+            //    hatsForm.AddField("cat_field", field);
+            //    xpEditForm.AddField("cat_value", CurrentPurrofile.Instance.xp);
+
+            default:
+                Debug.LogError("No Field of this type");
+                break;
+
         }
 
         yield return null;
